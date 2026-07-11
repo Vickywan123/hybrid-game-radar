@@ -1,0 +1,14 @@
+[
+ {"name":"Sand Balls - Digger Puzzle","studio":"SayGames LTD","days":900,
+  "ios":{"rating":4.6,"ratings":283875,"url":"https://apps.apple.com/x","icon":null},"android":null},
+ {"name":"Sand Balls - Puzzle Game","studio":"SayGames Ltd","days":880,
+  "ios":null,"android":{"installs":"100,000,000+","num":100000000,"score":4.4,"url":"https://play.google.com/store/apps/details?id=x","icon":null}},
+ {"name":"Gravity Sand Balls","studio":"Atta Mohi Ud Din","days":100,
+  "ios":{"rating":0,"ratings":0,"url":"https://apps.apple.com/y","icon":null},"android":null},
+ {"name":"Arrow Drop","studio":"Larisa Games","days":53,
+  "ios":null,"android":{"installs":"1,000+","num":1000,"score":4.4,"url":"https://play.google.com/store/apps/details?id=com.drop.arrow","icon":null}},
+ {"name":"Drop Arrow Pop","studio":"Babil Studios","days":51,
+  "ios":{"rating":1.0,"ratings":1,"url":"https://apps.apple.com/z","icon":null},"android":null},
+ {"name":"Marble Sort! - Color Puzzle","studio":"VOODOO","days":257,
+  "ios":null,"android":{"installs":"5,000,000+","num":5000000,"score":4.5,"url":"https://play.google.com/store/apps/details?id=m","icon":null}}
+]
