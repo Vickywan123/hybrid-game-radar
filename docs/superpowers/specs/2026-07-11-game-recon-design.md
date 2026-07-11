@@ -40,8 +40,8 @@ Term building blocks:
 - **Synonym family** — object noun → its family (bead → marble, ball, pearl); each synonym gets singles + pairs
 - **Mechanic combos** — action words without the object ("arrow drop", "drop sort", "arrow pop")
 
-### 3.2 Sources
-Apple iTunes Search API (free, keyless) + Google Play via `google-play-scraper`. US storefront default. Every term hits both stores.
+### 3.2 Sources & platform choice
+Apple iTunes Search API (free, keyless) + Google Play via `google-play-scraper`. US storefront default. **The user chooses platforms per run: both (default) / Apple only / Android only.** Apple requests run in parallel (8 workers — Apple tolerates it); Google Play stays serial (parallel access gets IP-blocked). (Amended 2026-07-11.)
 
 ### 3.3 Filtering — four gates
 1. **Games only** (Apple `primaryGenreName == "Games"`)
@@ -56,8 +56,8 @@ Apple iTunes Search API (free, keyless) + Google Play via `google-play-scraper`.
 
 Never anchor scoring to Claude's interpretation of the input — only to the user's words.
 
-### 3.5 Network resilience
-20s timeout, 3 retries per request; failed terms are skipped, never fatal — the term list is deliberately redundant so one lost term ≠ one lost game. Designed for unstable VPN conditions.
+### 3.5 Network resilience & cache
+20s timeout, 3 retries per request; failed terms are skipped, never fatal — the term list is deliberately redundant so one lost term ≠ one lost game. Designed for unstable VPN conditions. **Persistent cache** (`skill/cache/`, survives reinstalls): search results 1 day, per-game details 7 days — repeat and overlapping searches skip re-fetching. (Amended 2026-07-11.)
 
 ### 3.6 No caps
 Every game passing the gates goes on the page. Completeness > tidiness.

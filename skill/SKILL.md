@@ -22,16 +22,25 @@ Two principles override everything:
 
   Why always: "arrow drop" is simultaneously a valid concept and an exact game title, and the two cases anchor keywords differently.
 
-## Step 0.5 — Ask search depth (always, right after input type)
+## Step 0.5 — Ask search depth + platforms (always, right after input type; one combined question is fine)
 
-Ask with estimated times; **Precise is the recommended default**:
+**Depth** — ask with estimated times; **Precise is the recommended default**:
 
 > How deep should the search go?
 > 1. **Precise (recommended, ~1–2 min)** — only your keywords and their combinations
 > 2. **Standard (~3–5 min)** — + mechanic-word combos (sort/pop/tap…), catches games named by action
 > 3. **Comprehensive (~8–15 min)** — + synonym family (bead→marble/ball…), the never-miss net
 
-Why ask: search time scales with term count, and only the user knows whether this query is a quick check or a due-diligence sweep. Both word orders are searched at every depth (costs nothing, fixes a real store quirk). Put the choice in config as `"depth": "precise" | "standard" | "full"`.
+**Platforms:**
+
+> Which stores?
+> 1. **Apple + Android (default)** — the full picture
+> 2. **Apple only** — faster (Apple is parallelized); Android games won't appear
+> 3. **Android only** — includes install counts; Apple ratings won't appear
+
+Why ask: time scales with term count and Google Play is the slow half; only the user knows if this is a quick check or a due-diligence sweep. Both word orders are searched at every depth (costs nothing, fixes a real store quirk). Config keys: `"depth": "precise" | "standard" | "full"`, `"platforms": "both" | "ios" | "android"`.
+
+**Cache:** results are remembered (searches 1 day, per-game details 7 days), so repeat or overlapping runs are much faster and estimates above are worst-case for a cold run. Time estimates assume both platforms; single-platform runs are faster.
 
 ## Step 1 — Write config.json
 
@@ -50,7 +59,7 @@ Derive with judgment (this is your creative contribution; the scripts are mechan
  "synonyms":["marble","bead","ball"],
  "mechanics":["sort","pull","pop","loop","out","chain","tap"],
  "subline":"Every similar game across the App Store and Google Play, nothing capped. Fresh launches follow the time dial; Established = 1M+ downloads.",
- "filter_hint":"“sort”, “pop”","pin":"Arrow Drop","depth":"precise",
+ "filter_hint":"“sort”, “pop”","pin":"Arrow Drop","depth":"precise","platforms":"both",
  "workdir":"<absolute workdir path>"}
 ```
 

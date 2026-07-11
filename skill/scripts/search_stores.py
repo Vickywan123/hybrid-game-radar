@@ -1,6 +1,7 @@
 # skill/scripts/search_stores.py
 """Search Apple + Google Play for a concept. Spec: design doc §3.1-3.3, 3.5, 3.6."""
 import urllib.request, urllib.parse, ssl, json, re, sys, time
+import concurrent.futures, hashlib, os
 from datetime import date, datetime
 
 CTX = ssl.create_default_context()
@@ -9,6 +10,28 @@ BLOCK_APPLE = {"Sports", "Racing"}
 OK_GP = ("puzzle", "casual", "board")
 BLOCK_GP = ("sports", "racing")
 TODAY = date.today()
+
+# --- cache: search results live 1 day, per-game details 7 days ---
+CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "cache")
+TTL = {"apple_search": 86400, "gp_search": 86400, "gp_app": 7 * 86400}
+
+def cache_get(kind, key):
+    try:
+        p = os.path.join(CACHE_DIR, f"{kind}_{hashlib.md5(key.encode()).hexdigest()}.json")
+        d = json.load(open(p))
+        if time.time() - d["ts"] <= TTL[kind]:
+            return d["data"]
+    except Exception:
+        pass
+    return None
+
+def cache_put(kind, key, data):
+    try:
+        os.makedirs(CACHE_DIR, exist_ok=True)
+        p = os.path.join(CACHE_DIR, f"{kind}_{hashlib.md5(key.encode()).hexdigest()}.json")
+        json.dump({"ts": time.time(), "data": data}, open(p, "w"))
+    except Exception:
+        pass
 
 def gen_terms(input_words, synonyms, mechanics, depth="precise"):
     """depth: precise = user's words only; standard = + mechanic combos;
@@ -71,14 +94,29 @@ def main(cfg_path):
     print(f"{len(terms)} search terms")
 
     pool = {}
-    # ---- Apple ----
-    for i, t in enumerate(terms):
+    platforms = cfg.get("platforms", "both")   # both | ios | android
+
+    # ---- Apple: cached + parallel (Apple tolerates concurrency; Play does not) ----
+    def apple_fetch(t):
+        cached = cache_get("apple_search", t)
+        if cached is not None:
+            return t, cached
         limit = 200 if " " not in t else 50
         d = get_json("https://itunes.apple.com/search?term="
                      f"{urllib.parse.quote(t)}&entity=software&limit={limit}&country=us")
-        if not d:
+        results = d.get("results", []) if d else None
+        if results is not None:
+            cache_put("apple_search", t, results)
+        return t, results
+
+    apple_results = []
+    if platforms in ("both", "ios"):
+        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
+            apple_results = list(ex.map(apple_fetch, terms))
+    for t, results in apple_results:
+        if results is None:
             print(f"  apple skip: {t}"); continue
-        for r in d.get("results", []):
+        for r in results:
             if r.get("primaryGenreName") != "Games": continue          # gate 1
             g = set(r.get("genres", []))
             if (g & BLOCK_APPLE) or not (g & OK_APPLE): continue       # gate 2
@@ -91,24 +129,32 @@ def main(cfg_path):
                         "ratings": r.get("userRatingCount", 0) or 0,
                         "url": r["trackViewUrl"], "icon": r.get("artworkUrl100")},
                 "android": None}
-        if i % 10 == 0: print(f"  apple {i}/{len(terms)}")
+    if apple_results:
+        print(f"  apple done: {len(terms)} terms")
 
-    # ---- Google Play ----
+    # ---- Google Play: cached, serial (parallel gets IP-blocked) ----
     from google_play_scraper import app as gp_app, search as gp_search
     seen_gp = set()
-    for i, t in enumerate(terms):
-        try:
-            hits = gp_search(t, lang="en", country="us", n_hits=25)
-        except Exception:
-            print(f"  gp skip: {t}"); continue
+    gp_terms = terms if platforms in ("both", "android") else []
+    for i, t in enumerate(gp_terms):
+        hits = cache_get("gp_search", t)
+        if hits is None:
+            try:
+                hits = gp_search(t, lang="en", country="us", n_hits=25)
+                cache_put("gp_search", t, hits)
+            except Exception:
+                print(f"  gp skip: {t}"); continue
         for r in hits:
             if r["appId"] in seen_gp: continue
             if not title_gate(r["title"], iw, syn, mech): continue
             seen_gp.add(r["appId"])
-            try:
-                d = gp_app(r["appId"], lang="en", country="us")
-            except Exception:
-                continue
+            d = cache_get("gp_app", r["appId"])
+            if d is None:
+                try:
+                    d = gp_app(r["appId"], lang="en", country="us")
+                    cache_put("gp_app", r["appId"], d)
+                except Exception:
+                    continue
             genre = (d.get("genre") or "").lower()
             if any(b in genre for b in BLOCK_GP): continue
             if not any(g in genre for g in OK_GP): continue
@@ -121,7 +167,7 @@ def main(cfg_path):
                             "score": d.get("score") or 0,
                             "url": f"https://play.google.com/store/apps/details?id={r['appId']}",
                             "icon": d.get("icon")}}
-        if i % 10 == 0: print(f"  gp {i}/{len(terms)}")
+        if i % 10 == 0: print(f"  gp {i}/{len(gp_terms)}")
 
     out = list(pool.values())
     dst = f"{cfg['workdir']}/pool.json"
