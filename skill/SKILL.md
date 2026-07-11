@@ -81,6 +81,8 @@ Individual term failures print `skip` and continue — that is by design (unstab
 
 Read `<workdir>/descriptions.json` and judge each game: does its *described mechanic* match the concept family? A shared noun is not a match — "Marble …" titles are frequently Zuma chain-shooters (vocabulary: shoot, aim, chain of balls), a completely different genre; bow/archery and board-game vocabularies are other known impostors.
 
+**Case A: judge against the anchor game's own description, not your genre intuition.** First extract the pinned game's mechanic fingerprint (its description's action vocabulary — e.g. Block Jam: slide, match colors, collect). A candidate matches if its description shares that fingerprint, whatever its skin.
+
 **The skin is never grounds for exclusion (failure #23).** The same cut works in both directions: don't KEEP a game just because it shares the noun, and don't EXCLUDE a game just because the noun differs. Jam/collection mechanics especially wear many skins — blocks, buses, cars, passengers, goods are all the same genre to a hybrid developer (a real user corrected a Bus Jam exclusion on a Block Jam search). Wrong exclusions also cripple the snowball: excluded titles can't contribute vocabulary. Keep borderline cases — a wrong exclusion is invisible to the user, a wrong inclusion is easy for them to spot. Write the exact `name` strings to reject into `<workdir>/exclusions.json` (JSON array of strings), then:
 
 ```bash
@@ -101,6 +103,8 @@ It appends new gate-passing games to games.json and writes their names to `<work
 $PY $SKILL_DIR/scripts/apply_exclusions.py <workdir>/config.json
 $PY $SKILL_DIR/scripts/gen_page.py         <workdir>/config.json    # icons + report.html
 ```
+
+The page footer automatically lists every excluded game in a collapsed audit section — tell the user it exists, so wrong exclusions are catchable at a glance.
 
 Do NOT mine the raw pool instead of verified titles — measured on "blast", raw-pool mining surfaces the loudest impostor genres (bubble/ball/marble) and buries the real family vocabulary.
 

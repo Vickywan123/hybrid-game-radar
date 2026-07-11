@@ -154,6 +154,17 @@ def main(cfg_path):
     tpl = open(os.path.join(os.path.dirname(__file__), "..", "assets", "template.html")).read()
     out = render(games, tpl, cfg["query"], cfg.get("subline", ""),
                  cfg.get("filter_hint", "“sort”"), cfg.get("pin"))
+    # visible exclusion audit (spec failure #23: wrong exclusions must be catchable)
+    try:
+        excl = sorted(set(json.load(open(f"{wd}/exclusions.json"))))
+    except Exception:
+        excl = []
+    if excl:
+        items = "".join(f"<li>{esc(n)}</li>" for n in excl)
+        audit = (f'<details class="audit"><summary>⚖️ {len(excl)} games judged '
+                 f'different-mechanic and excluded — check for mistakes</summary>'
+                 f'<ul>{items}</ul></details>')
+        out = out.replace("</body>", audit + "</body>") if "</body>" in out               else out.replace("<script>", audit + "<script>", 1)
     open(f"{wd}/report.html", "w").write(out)
     print(f"report: {wd}/report.html ({len(out)//1024} KB, {len(games)} cards)")
 

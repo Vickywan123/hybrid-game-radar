@@ -91,6 +91,10 @@
     padding:8px;gap:8px;box-shadow:var(--shadow);overflow-x:auto;}
   .card:hover .shots{display:flex;}
   .shot{height:120px;border-radius:8px;border:1px solid var(--line);flex:none;}
+  .audit{max-width:1120px;margin:10px auto 40px;padding:0 20px;color:var(--faint);font-size:12.5px;}
+  .audit summary{cursor:pointer;color:var(--muted);}
+  .audit ul{columns:3;margin-top:10px;}
+  @media (max-width:800px){.audit ul{columns:1;}}
 
   .note{margin-top:8px;font-size:12.5px;color:var(--faint);border-top:1px solid var(--line);padding-top:14px;line-height:1.6;}
   .note b{color:var(--muted);}
