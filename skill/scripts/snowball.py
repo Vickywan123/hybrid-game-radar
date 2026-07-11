@@ -48,7 +48,7 @@ def main(cfg_path):
     merged_new = merge(new)
     # score with the USER'S synonyms only — mined words widen the net (gate),
     # never the ranking (§3.4: anchor to the user's words, not Claude's)
-    score(merged_new, iw, syn, mech)
+    score(merged_new, iw, syn, mech, cfg.get("theme_words"))
     games += merged_new
     json.dump(games, open(f"{wd}/games.json", "w"))
     top = sorted(merged_new, key=lambda g: -(g.get("reach", 0)))[:10]

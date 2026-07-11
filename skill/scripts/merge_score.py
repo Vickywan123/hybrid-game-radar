@@ -57,9 +57,15 @@ def reach(r):
     i = (r["ios"]["ratings"] * 30) if r["ios"] else 0    # reviews ~3% of installs
     return max(a, i)
 
-def score(records, input_words, synonyms, mechanics):
+def score(records, input_words, synonyms, mechanics, theme_words=None):
+    """Tiered relevance (spec §3.4). theme_words = the subset of input words
+    that name the concept's THEME/skin (yarn, pixel); the rest are mechanic-
+    type input words (conveyor, drop). Theme dominates: a game touching only
+    the mechanic word must rank below every theme-family game (failure #22).
+    theme_words=None keeps the legacy behavior (all input words equal)."""
     q = na(" ".join(input_words))
-    fam = input_words + synonyms
+    theme = [w.lower() for w in (theme_words if theme_words is not None else input_words)]
+    mech_in = [w.lower() for w in input_words if w.lower() not in theme]
     for r in records:
         n = r["name"].lower()
         r["reach"] = reach(r)
@@ -68,15 +74,16 @@ def score(records, input_words, synonyms, mechanics):
         elif all(w in n for w in input_words):
             r["rel"] = 500 + sum(1 for w in mechanics if w in n)       # tier 1
         else:                                                          # tier 2
-            r["rel"] = (sum(1 for w in input_words if w in n) * 10
-                        + sum(1 for w in fam if w in n) * 3
+            r["rel"] = (sum(1 for w in theme if w in n) * 20
+                        + sum(1 for w in synonyms if w in n) * 8
+                        + sum(1 for w in mech_in if w in n) * 5
                         + min(sum(1 for w in mechanics if w in n), 3) * 2)
 
 def main(cfg_path):
     cfg = json.load(open(cfg_path))
     recs = json.load(open(f"{cfg['workdir']}/pool.json"))
     out = merge(recs)
-    score(out, cfg["input_words"], cfg["synonyms"], cfg["mechanics"])
+    score(out, cfg["input_words"], cfg["synonyms"], cfg["mechanics"], cfg.get("theme_words"))
     json.dump(out, open(f"{cfg['workdir']}/games.json", "w"))
     print(f"merged: {len(recs)} -> {len(out)} games")
 

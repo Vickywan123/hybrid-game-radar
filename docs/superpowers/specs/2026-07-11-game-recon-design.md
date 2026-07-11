@@ -52,7 +52,7 @@ Apple iTunes Search API (free, keyless) + Google Play via `google-play-scraper`.
 ### 3.4 Relevance — tiered, anchored to the user's exact input words
 - **Tier 0** — normalized title equals the input → always first, above any ranking
 - **Tier 1** — title contains every input word → next
-- **Tier 2** — remainder scored: input words ×10 · synonym-family words ×3 · mechanic words ×2 (capped at 3) · ties broken by downloads
+- **Tier 2** — remainder scored with THEME dominance (amended 2026-07-11, failure #22): theme input words ×20 · synonyms ×8 · mechanic-type input words ×5 · general mechanic words ×2 (capped at 3) · ties broken by downloads. Claude classifies each input word as theme (object/skin noun) or mechanic before the run; pure-mechanic concepts have no theme words and anchor on mechanics + description judgment.
 
 Never anchor scoring to Claude's interpretation of the input — only to the user's words.
 
@@ -121,6 +121,7 @@ No long-tail bucket — it lives at the dial's "all" stop. Hidden-count hint ("+
 | 19 | Future-dated release ranks first under "newest" | King Match 3D showed "-52d ago" at position 1 | Negative days → "upcoming" badge, sorts as day 0 (§5.4) |
 | 20 | Irrelevant games outrank true matches under "most relevant" | Coffee Craze (mined-word hits) above Thread Jam in yarn run | Snowball additions scored with the user's synonyms only; mined words widen the net, never the ranking (§3.4) |
 | 21 | Snowball mines generic vocabulary | color/away/sorting mined from yarn titles → 445 noise candidates | Known-word variants + hyper-casual filler in STOP; variant-aware known check (§3.1) |
+| 22 | Mechanic-word-only games outrank theme games | "conveyor jam" above yarn games in yarn run | Theme/mechanic input-word classification; theme ×20 dominates (§3.4) |
 
 **Standing rule:** user reports a miss → diagnose → fix the class, not the instance → add a row here.
 

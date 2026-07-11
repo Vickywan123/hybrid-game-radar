@@ -62,7 +62,25 @@ def test_snowball_scoring_not_polluted():
     assert by["Thread Jam - Untangle 3D Ropes"] > by["Coffee Craze - Sorting Game"], by
     print("test_snowball_scoring_not_polluted OK")
 
+def test_theme_dominates_mechanic():
+    """Failure #22: 'conveyor jam' (mechanic word only) outranked yarn games.
+    With theme_words=['yarn'], every yarn/wool/knit game must beat it."""
+    from merge_score import score
+    def g(name):
+        return {"name": name, "studio": "S", "days": 10, "ios": None,
+                "android": {"installs": "10+", "num": 10, "score": 4, "url": "u", "icon": None}}
+    games = [g("conveyor jam"), g("Color Sort Conveyor"), g("Yarn Maze"),
+             g("Wool Frenzy"), g("Thread Jam - Untangle 3D Ropes")]
+    score(games, ["yarn", "conveyor"], ["wool", "thread", "knit", "string"],
+          ["sort", "knit", "wind", "weave", "loop", "tangle", "jam"], theme_words=["yarn"])
+    by = {x["name"]: x["rel"] for x in games}
+    assert by["Yarn Maze"] > by["conveyor jam"], by
+    assert by["Wool Frenzy"] > by["conveyor jam"], by
+    assert by["Thread Jam - Untangle 3D Ropes"] > by["Color Sort Conveyor"], by
+    print("test_theme_dominates_mechanic OK")
+
 test_pixel_flow_class()
+test_theme_dominates_mechanic()
 test_mine_ignores_stopwords()
 test_yarn_generic_leak()
 test_snowball_scoring_not_polluted()

@@ -49,6 +49,7 @@ Why ask: time scales with term count and Google Play is the slow half; only the 
 Derive with judgment (this is your creative contribution; the scripts are mechanical):
 
 - `input_words` — Case A: the game title's meaningful words (drop "3D", "Game", punctuation). Case B: the user's own words. Ranking anchors to these exact words, never to your interpretation.
+- `theme_words` — the subset of input_words that names the concept's THEME/skin (the object noun: yarn, pixel, sand). The rest are mechanic-type words (conveyor, drop, blast). Theme dominates ranking ×20; a game touching only the mechanic word ranks below every theme-family game. **Pure-mechanic concepts** ("this is blast" — no theme noun): set theme_words to [] and let mechanics + description judgment carry the matching.
 - `synonyms` — the object noun's family (bead → marble, ball, pearl). Studios name the same object differently; this net caught games the literal words missed.
 - `mechanics` — action words for the concept family (sort, pull, pop, drop, loop, out, chain, tap). Some games name only actions, never the object.
 - `query` — Case A: the exact game name as the store shows it. Case B: the user's phrase verbatim. This becomes the page title.
@@ -61,7 +62,7 @@ Derive with judgment (this is your creative contribution; the scripts are mechan
  "synonyms":["marble","bead","ball"],
  "mechanics":["sort","pull","pop","loop","out","chain","tap"],
  "subline":"Every similar game across the App Store and Google Play, nothing capped. Fresh launches follow the time dial; Established = 1M+ downloads.",
- "filter_hint":"“sort”, “pop”","pin":"Arrow Drop","depth":"precise","platforms":"both",
+ "filter_hint":"“sort”, “pop”","pin":"Arrow Drop","theme_words":["arrow"],"depth":"precise","platforms":"both",
  "workdir":"<absolute workdir path>"}
 ```
 
