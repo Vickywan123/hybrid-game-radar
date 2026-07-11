@@ -80,8 +80,24 @@ Read `<workdir>/descriptions.json` and judge each game: does its *described mech
 
 ```bash
 $PY $SKILL_DIR/scripts/apply_exclusions.py <workdir>/config.json
+```
+
+## Step 3.5 — Snowball wave (after judgment, before the page)
+
+Same mechanic often hides under completely different names ("Pixel Flow!" vs "This is Blast!" — zero shared words). The snowball mines new vocabulary from the titles you just VERIFIED (judgment set minus exclusions) and sweeps the stores again:
+
+```bash
+$PY $SKILL_DIR/scripts/snowball.py <workdir>/config.json   # ~1–3 min
+```
+
+It appends new gate-passing games to games.json and writes their names to `<workdir>/snowball_new.json`. **Judge that list too** (round 2 — usually small; use store descriptions or your own knowledge of well-known titles): append wrong-mechanic names to `<workdir>/exclusions.json`, re-run apply_exclusions, then build the page:
+
+```bash
+$PY $SKILL_DIR/scripts/apply_exclusions.py <workdir>/config.json
 $PY $SKILL_DIR/scripts/gen_page.py         <workdir>/config.json    # icons + report.html
 ```
+
+Do NOT mine the raw pool instead of verified titles — measured on "blast", raw-pool mining surfaces the loudest impostor genres (bubble/ball/marble) and buries the real family vocabulary.
 
 ## Step 4 — Deliver
 

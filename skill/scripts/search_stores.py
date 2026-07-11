@@ -1,7 +1,9 @@
 # skill/scripts/search_stores.py
-"""Search Apple + Google Play for a concept. Spec: design doc §3.1-3.3, 3.5, 3.6."""
+"""Search Apple + Google Play for a concept. Spec: design doc §3.1-3.3, 3.5, 3.6.
+The post-judgment snowball wave lives in snowball.py (spec failure #17)."""
 import urllib.request, urllib.parse, ssl, json, re, sys, time
 import concurrent.futures, hashlib, os
+from collections import Counter
 from datetime import date, datetime
 
 CTX = ssl.create_default_context()
@@ -55,6 +57,43 @@ def gen_terms(input_words, synonyms, mechanics, depth="precise"):
                 terms += [f"{s} {b}", f"{b} {s}"]
     return list(dict.fromkeys(terms))
 
+# --- snowball vocabulary mining (spec failure #17: same mechanic, zero
+# shared title words — "Pixel Flow!" vs "This is Blast!"). Mining must use
+# MECHANIC-VERIFIED titles only: mining the raw pool surfaces the loudest
+# impostor genres instead (measured: bubble/ball/marble from the blast pool). ---
+STOP = {"game", "games", "puzzle", "puzzles", "free", "new", "best", "fun",
+        "master", "mania", "legend", "saga", "classic", "pro", "super",
+        "plus", "king", "big", "little", "the", "and", "for", "with", "your",
+        "of", "my", "in", "out", "up", "go", "no", "is", "it", "this",
+        "2d", "3d", "offline", "online", "adventure", "challenge", "brain",
+        "epic", "ultimate", "crazy", "happy", "world", "story", "journey"}
+
+def mine_new_words(verified_names, known_words, top_n=5):
+    """Extract the most frequent unknown words from mechanic-verified titles."""
+    known = {w.lower() for w in known_words} | STOP
+    counts = Counter()
+    for name in verified_names:
+        for w in re.findall(r"[a-z]{3,}", name.lower()):
+            if w not in known:
+                counts[w] += 1
+    return [w for w, _ in counts.most_common(top_n)]
+
+def snowball_terms(verified_names, input_words, known_words, max_terms=20):
+    """Build wave-2 terms from words mined out of verified titles:
+    mined singles + mined pairs + mined×input combos, both orders."""
+    iw = [w.lower() for w in input_words]
+    mined = mine_new_words(verified_names, list(known_words) + iw)
+    terms = []
+    for a in mined:
+        terms.append(a)                                  # mined singles (highest value)
+    for a in mined:                                      # mined × input combos
+        for w in iw:
+            terms += [f"{a} {w}", f"{w} {a}"]
+    for i, a in enumerate(mined):                        # mined pairs, both orders
+        for b in mined[i + 1:]:
+            terms += [f"{a} {b}", f"{b} {a}"]
+    return mined, list(dict.fromkeys(terms))[:max_terms]
+
 def get_json(url, tries=3):
     for _ in range(tries):
         try:
@@ -80,95 +119,94 @@ def installs_num(s):
     m = re.search(r"([\d,]+)", s or "")
     return int(m.group(1).replace(",", "")) if m else 0
 
-def title_gate(name, input_words, synonyms, mechanics):
+def title_gate(name, fam, mechanics):
     n = name.lower()
-    fam = input_words + synonyms
     if any(w in n for w in fam):
         return True
     return sum(1 for w in mechanics if w in n) >= 2      # gate 3
 
+def apple_fetch(t):
+    cached = cache_get("apple_search", t)
+    if cached is not None:
+        return t, cached
+    limit = 200 if " " not in t else 50
+    d = get_json("https://itunes.apple.com/search?term="
+                 f"{urllib.parse.quote(t)}&entity=software&limit={limit}&country=us")
+    results = d.get("results", []) if d else None
+    if results is not None:
+        cache_put("apple_search", t, results)
+    return t, results
+
+def run_sweep(pool, terms, fam, mech, platforms, label):
+    """Sweep both stores for `terms`, adding gate-passing games to `pool`
+    (dict keyed by (store, id)). Reused by search_stores and snowball."""
+    # ---- Apple: cached + parallel (Apple tolerates concurrency) ----
+    if platforms in ("both", "ios"):
+        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
+            results = list(ex.map(apple_fetch, terms))
+        for t, rs in results:
+            if rs is None:
+                print(f"  apple skip: {t}"); continue
+            for r in rs:
+                if r.get("primaryGenreName") != "Games": continue          # gate 1
+                g = set(r.get("genres", []))
+                if (g & BLOCK_APPLE) or not (g & OK_APPLE): continue       # gate 2
+                if not title_gate(r["trackName"], fam, mech): continue     # gate 3
+                pool[("a", r["trackId"])] = {
+                    "name": r["trackName"], "studio": r["artistName"],
+                    "days": days_from_iso(r.get("releaseDate", "")),
+                    "ios": {"rating": r.get("averageUserRating", 0) or 0,
+                            "ratings": r.get("userRatingCount", 0) or 0,
+                            "url": r["trackViewUrl"], "icon": r.get("artworkUrl100")},
+                    "android": None}
+        print(f"  {label} apple done: {len(terms)} terms")
+    # ---- Google Play: cached, serial (parallel gets IP-blocked) ----
+    if platforms in ("both", "android"):
+        from google_play_scraper import app as gp_app, search as gp_search
+        seen = set()
+        for i, t in enumerate(terms):
+            hits = cache_get("gp_search", t)
+            if hits is None:
+                try:
+                    hits = gp_search(t, lang="en", country="us", n_hits=25)
+                    cache_put("gp_search", t, hits)
+                except Exception:
+                    print(f"  gp skip: {t}"); continue
+            for r in hits:
+                if r["appId"] in seen or ("g", r["appId"]) in pool: continue
+                if not title_gate(r["title"], fam, mech): continue
+                seen.add(r["appId"])
+                d = cache_get("gp_app", r["appId"])
+                if d is None:
+                    try:
+                        d = gp_app(r["appId"], lang="en", country="us")
+                        cache_put("gp_app", r["appId"], d)
+                    except Exception:
+                        continue
+                genre = (d.get("genre") or "").lower()
+                if any(b in genre for b in BLOCK_GP): continue
+                if not any(g in genre for g in OK_GP): continue
+                pool[("g", r["appId"])] = {
+                    "name": d["title"], "studio": d["developer"],
+                    "days": days_from_gp(d.get("released") or ""),
+                    "ios": None,
+                    "android": {"installs": d.get("installs", "?"),
+                                "num": installs_num(d.get("installs")),
+                                "score": d.get("score") or 0,
+                                "url": f"https://play.google.com/store/apps/details?id={r['appId']}",
+                                "icon": d.get("icon")}}
+            if i % 10 == 0: print(f"  {label} gp {i}/{len(terms)}")
+        print(f"  {label} gp done")
+
 def main(cfg_path):
     cfg = json.load(open(cfg_path))
     iw, syn, mech = cfg["input_words"], cfg["synonyms"], cfg["mechanics"]
-    terms = gen_terms(iw, syn, mech, cfg.get("depth", "precise"))
-    print(f"{len(terms)} search terms")
-
+    platforms = cfg.get("platforms", "both")             # both | ios | android
     pool = {}
-    platforms = cfg.get("platforms", "both")   # both | ios | android
-
-    # ---- Apple: cached + parallel (Apple tolerates concurrency; Play does not) ----
-    def apple_fetch(t):
-        cached = cache_get("apple_search", t)
-        if cached is not None:
-            return t, cached
-        limit = 200 if " " not in t else 50
-        d = get_json("https://itunes.apple.com/search?term="
-                     f"{urllib.parse.quote(t)}&entity=software&limit={limit}&country=us")
-        results = d.get("results", []) if d else None
-        if results is not None:
-            cache_put("apple_search", t, results)
-        return t, results
-
-    apple_results = []
-    if platforms in ("both", "ios"):
-        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
-            apple_results = list(ex.map(apple_fetch, terms))
-    for t, results in apple_results:
-        if results is None:
-            print(f"  apple skip: {t}"); continue
-        for r in results:
-            if r.get("primaryGenreName") != "Games": continue          # gate 1
-            g = set(r.get("genres", []))
-            if (g & BLOCK_APPLE) or not (g & OK_APPLE): continue       # gate 2
-            if not title_gate(r["trackName"], iw, syn, mech): continue # gate 3
-            key = ("a", r["trackId"])
-            pool[key] = {
-                "name": r["trackName"], "studio": r["artistName"],
-                "days": days_from_iso(r.get("releaseDate", "")),
-                "ios": {"rating": r.get("averageUserRating", 0) or 0,
-                        "ratings": r.get("userRatingCount", 0) or 0,
-                        "url": r["trackViewUrl"], "icon": r.get("artworkUrl100")},
-                "android": None}
-    if apple_results:
-        print(f"  apple done: {len(terms)} terms")
-
-    # ---- Google Play: cached, serial (parallel gets IP-blocked) ----
-    from google_play_scraper import app as gp_app, search as gp_search
-    seen_gp = set()
-    gp_terms = terms if platforms in ("both", "android") else []
-    for i, t in enumerate(gp_terms):
-        hits = cache_get("gp_search", t)
-        if hits is None:
-            try:
-                hits = gp_search(t, lang="en", country="us", n_hits=25)
-                cache_put("gp_search", t, hits)
-            except Exception:
-                print(f"  gp skip: {t}"); continue
-        for r in hits:
-            if r["appId"] in seen_gp: continue
-            if not title_gate(r["title"], iw, syn, mech): continue
-            seen_gp.add(r["appId"])
-            d = cache_get("gp_app", r["appId"])
-            if d is None:
-                try:
-                    d = gp_app(r["appId"], lang="en", country="us")
-                    cache_put("gp_app", r["appId"], d)
-                except Exception:
-                    continue
-            genre = (d.get("genre") or "").lower()
-            if any(b in genre for b in BLOCK_GP): continue
-            if not any(g in genre for g in OK_GP): continue
-            pool[("g", r["appId"])] = {
-                "name": d["title"], "studio": d["developer"],
-                "days": days_from_gp(d.get("released") or ""),
-                "ios": None,
-                "android": {"installs": d.get("installs", "?"),
-                            "num": installs_num(d.get("installs")),
-                            "score": d.get("score") or 0,
-                            "url": f"https://play.google.com/store/apps/details?id={r['appId']}",
-                            "icon": d.get("icon")}}
-        if i % 10 == 0: print(f"  gp {i}/{len(gp_terms)}")
-
+    terms = gen_terms(iw, syn, mech, cfg.get("depth", "precise"))
+    fam = [w.lower() for w in iw + syn]
+    print(f"wave 1: {len(terms)} terms")
+    run_sweep(pool, terms, fam, mech, platforms, "w1")
     out = list(pool.values())
     dst = f"{cfg['workdir']}/pool.json"
     json.dump(out, open(dst, "w"))

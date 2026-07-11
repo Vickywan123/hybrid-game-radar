@@ -116,6 +116,7 @@ No long-tail bucket — it lives at the dial's "all" stop. Hidden-count hint ("+
 | 14 | Missing release dates | Play omits dates on old games | "date unknown" chip, never blank (§5.4) |
 | 15 | Ranking ignored exact match | Arrow Drop at bottom of its own search | Tier 0/1/2 relevance (§3.4) |
 | 16 | Input-word lineage missing | No arrow hits in Established | Every input word runs as full single term (§3.1) |
+| 17 | Same mechanic, zero shared title words | "Pixel Flow!" invisible to every "blast" net | Post-judgment snowball: mine verified titles for new vocabulary, sweep again (snowball.py). Mining the raw pool fails — impostor genres dominate (measured) |
 
 **Standing rule:** user reports a miss → diagnose → fix the class, not the instance → add a row here.
 
