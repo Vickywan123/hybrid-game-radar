@@ -46,7 +46,7 @@ def fetch_shot_120(url):
     """Store screenshot shrunk to 120px height JPEG. Cached; empty on failure."""
     if not url: return ""
     try:
-        p = _icon_cache_path("shot240" + url)
+        p = _icon_cache_path("shot200" + url)
         if os.path.exists(p):
             return open(p).read()
     except Exception:
@@ -58,14 +58,14 @@ def fetch_shot_120(url):
         with tempfile.TemporaryDirectory() as d:
             src, dst = f"{d}/i.bin", f"{d}/o.jpg"
             open(src, "wb").write(raw)
-            pr = subprocess.run(["sips", "--resampleHeight", "240", "-s", "format", "jpeg",
-                                 "-s", "formatOptions", "55", src, "--out", dst],
+            pr = subprocess.run(["sips", "--resampleHeight", "200", "-s", "format", "jpeg",
+                                 "-s", "formatOptions", "45", src, "--out", dst],
                                 capture_output=True)
             if pr.returncode == 0:
                 data = "data:image/jpeg;base64," + base64.b64encode(open(dst, "rb").read()).decode()
                 try:
                     os.makedirs(CACHE_DIR, exist_ok=True)
-                    open(_icon_cache_path("shot240" + url), "w").write(data)
+                    open(_icon_cache_path("shot200" + url), "w").write(data)
                 except Exception:
                     pass
                 return data
