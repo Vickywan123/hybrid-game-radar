@@ -46,7 +46,9 @@ def main(cfg_path):
         print("snowball found no new games"); return
 
     merged_new = merge(new)
-    score(merged_new, iw, syn + mined, mech)
+    # score with the USER'S synonyms only — mined words widen the net (gate),
+    # never the ranking (§3.4: anchor to the user's words, not Claude's)
+    score(merged_new, iw, syn, mech)
     games += merged_new
     json.dump(games, open(f"{wd}/games.json", "w"))
     top = sorted(merged_new, key=lambda g: -(g.get("reach", 0)))[:10]

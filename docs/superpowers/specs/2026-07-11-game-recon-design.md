@@ -119,6 +119,8 @@ No long-tail bucket — it lives at the dial's "all" stop. Hidden-count hint ("+
 | 17 | Same mechanic, zero shared title words | "Pixel Flow!" invisible to every "blast" net | Post-judgment snowball: mine verified titles for new vocabulary, sweep again (snowball.py). Mining the raw pool fails — impostor genres dominate (measured) |
 | 18 | Same game, different legal studio names per store | Pixel Flow! (Loom Games Oyun… / Loom Games A.Ş.) shown twice | Merge pass 0: identical normalized title + complementary stores merges regardless of studio (§4.2) |
 | 19 | Future-dated release ranks first under "newest" | King Match 3D showed "-52d ago" at position 1 | Negative days → "upcoming" badge, sorts as day 0 (§5.4) |
+| 20 | Irrelevant games outrank true matches under "most relevant" | Coffee Craze (mined-word hits) above Thread Jam in yarn run | Snowball additions scored with the user's synonyms only; mined words widen the net, never the ranking (§3.4) |
+| 21 | Snowball mines generic vocabulary | color/away/sorting mined from yarn titles → 445 noise candidates | Known-word variants + hyper-casual filler in STOP; variant-aware known check (§3.1) |
 
 **Standing rule:** user reports a miss → diagnose → fix the class, not the instance → add a row here.
 

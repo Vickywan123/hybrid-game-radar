@@ -26,10 +26,12 @@ Two principles override everything:
 
 **Depth** — ask with estimated times; **Precise is the recommended default**:
 
-> How deep should the search go?
-> 1. **Precise (recommended, ~1–2 min)** — only your keywords and their combinations
-> 2. **Standard (~3–5 min)** — + mechanic-word combos (sort/pop/tap…), catches games named by action
-> 3. **Comprehensive (~8–15 min)** — + synonym family (bead→marble/ball…), the never-miss net
+> How deep should the search go? (times are END-TO-END for a first run, incl. judgment, snowball and page build; repeat/similar searches are much faster thanks to the cache)
+> 1. **Precise (recommended, ~3–8 min total)** — only your keywords and their combinations
+> 2. **Standard (~10–25 min total)** — + mechanic-word combos (sort/pop/tap…), catches games named by action
+> 3. **Comprehensive (~20–40 min total)** — + synonym family (bead→marble/ball…), the never-miss net
+
+The snowball stage's cost scales with how many NEW games it discovers — first runs on a fresh concept are the slowest; re-runs are cheap.
 
 **Platforms:**
 
@@ -67,7 +69,7 @@ Derive with judgment (this is your creative contribution; the scripts are mechan
 
 ```bash
 PY=$SKILL_DIR/venv/bin/python
-$PY $SKILL_DIR/scripts/search_stores.py      <workdir>/config.json   # ~2–4 min, both stores
+$PY $SKILL_DIR/scripts/search_stores.py      <workdir>/config.json   # search stage, both stores
 $PY $SKILL_DIR/scripts/merge_score.py        <workdir>/config.json   # cross-store merge + tiers
 $PY $SKILL_DIR/scripts/fetch_descriptions.py <workdir>/config.json   # judgment set
 ```
