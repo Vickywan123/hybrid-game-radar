@@ -79,7 +79,9 @@ Individual term failures print `skip` and continue — that is by design (unstab
 
 ## Step 3 — Mechanic judgment (you, not a regex)
 
-Read `<workdir>/descriptions.json` and judge each game: does its *described mechanic* match the concept family? A shared noun is not a match — "Marble …" titles are frequently Zuma chain-shooters (vocabulary: shoot, aim, chain of balls), a completely different genre; bow/archery and board-game vocabularies are other known impostors. Keep borderline cases — a wrong exclusion is invisible to the user, a wrong inclusion is easy for them to spot. Write the exact `name` strings to reject into `<workdir>/exclusions.json` (JSON array of strings), then:
+Read `<workdir>/descriptions.json` and judge each game: does its *described mechanic* match the concept family? A shared noun is not a match — "Marble …" titles are frequently Zuma chain-shooters (vocabulary: shoot, aim, chain of balls), a completely different genre; bow/archery and board-game vocabularies are other known impostors.
+
+**The skin is never grounds for exclusion (failure #23).** The same cut works in both directions: don't KEEP a game just because it shares the noun, and don't EXCLUDE a game just because the noun differs. Jam/collection mechanics especially wear many skins — blocks, buses, cars, passengers, goods are all the same genre to a hybrid developer (a real user corrected a Bus Jam exclusion on a Block Jam search). Wrong exclusions also cripple the snowball: excluded titles can't contribute vocabulary. Keep borderline cases — a wrong exclusion is invisible to the user, a wrong inclusion is easy for them to spot. Write the exact `name` strings to reject into `<workdir>/exclusions.json` (JSON array of strings), then:
 
 ```bash
 $PY $SKILL_DIR/scripts/apply_exclusions.py <workdir>/config.json
