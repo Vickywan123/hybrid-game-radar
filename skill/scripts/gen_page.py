@@ -46,7 +46,7 @@ def fetch_shot_120(url):
     """Store screenshot shrunk to 120px height JPEG. Cached; empty on failure."""
     if not url: return ""
     try:
-        p = _icon_cache_path("shot" + url)
+        p = _icon_cache_path("shot240" + url)
         if os.path.exists(p):
             return open(p).read()
     except Exception:
@@ -58,14 +58,14 @@ def fetch_shot_120(url):
         with tempfile.TemporaryDirectory() as d:
             src, dst = f"{d}/i.bin", f"{d}/o.jpg"
             open(src, "wb").write(raw)
-            pr = subprocess.run(["sips", "--resampleHeight", "120", "-s", "format", "jpeg",
-                                 "-s", "formatOptions", "50", src, "--out", dst],
+            pr = subprocess.run(["sips", "--resampleHeight", "240", "-s", "format", "jpeg",
+                                 "-s", "formatOptions", "55", src, "--out", dst],
                                 capture_output=True)
             if pr.returncode == 0:
                 data = "data:image/jpeg;base64," + base64.b64encode(open(dst, "rb").read()).decode()
                 try:
                     os.makedirs(CACHE_DIR, exist_ok=True)
-                    open(_icon_cache_path("shot" + url), "w").write(data)
+                    open(_icon_cache_path("shot240" + url), "w").write(data)
                 except Exception:
                     pass
                 return data
@@ -137,7 +137,13 @@ def main(cfg_path):
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
         list(ex.map(_fill, need))
     print(f"  icons fetched: {len(need)} (parallel, cached)")
-    sneed = [g for g in games if not g.get("shotsData")]
+    def _shots_eligible(g):
+        d = g.get("days")
+        return g.get("reach", 0) >= 1_000_000 or (d is not None and 0 <= d <= 180)
+    for g in games:
+        if not _shots_eligible(g):
+            g["shotsData"] = []
+    sneed = [g for g in games if not g.get("shotsData") and _shots_eligible(g)]
     def _fill_shots(g):
         urls = ((g.get("ios") or {}).get("shots") or (g.get("android") or {}).get("shots") or [])[:4]
         g["shotsData"] = [fetch_shot_120(u) for u in urls]
