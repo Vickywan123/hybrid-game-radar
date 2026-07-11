@@ -1,0 +1,269 @@
+<title>Game Recon — {{QUERY}}</title>
+<style>
+  :root{
+    --paper:#f5f6f9;--surface:#ffffff;--surface-2:#fbfcfe;
+    --ink:#161a22;--muted:#5c6675;--faint:#8a93a2;
+    --line:#e5e9f0;--line-strong:#d6dbe6;
+    --accent:#3b57ff;--accent-soft:#eaeeff;
+    --hot:#df3d43;--hot-soft:#fdecec;
+    --warn:#b8791a;--warn-soft:#f9efdb;
+    --open:#1f9d63;--open-soft:#e6f6ee;
+    --shadow:0 1px 2px rgba(20,26,40,.06),0 8px 24px rgba(20,26,40,.05);
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --paper:#0e1117;--surface:#161b24;--surface-2:#1b212c;
+    --ink:#e9edf5;--muted:#9aa3b2;--faint:#6c7686;
+    --line:#252c38;--line-strong:#313a49;
+    --accent:#7d92ff;--accent-soft:#1c2440;
+    --hot:#ff6066;--hot-soft:#33191b;
+    --warn:#e0a638;--warn-soft:#332713;
+    --open:#3ec489;--open-soft:#12291e;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+  }}
+  :root[data-theme="light"]{
+    --paper:#f5f6f9;--surface:#ffffff;--surface-2:#fbfcfe;--ink:#161a22;--muted:#5c6675;--faint:#8a93a2;
+    --line:#e5e9f0;--line-strong:#d6dbe6;--accent:#3b57ff;--accent-soft:#eaeeff;
+    --hot:#df3d43;--hot-soft:#fdecec;--warn:#b8791a;--warn-soft:#f9efdb;--open:#1f9d63;--open-soft:#e6f6ee;
+    --shadow:0 1px 2px rgba(20,26,40,.06),0 8px 24px rgba(20,26,40,.05);
+  }
+  :root[data-theme="dark"]{
+    --paper:#0e1117;--surface:#161b24;--surface-2:#1b212c;--ink:#e9edf5;--muted:#9aa3b2;--faint:#6c7686;
+    --line:#252c38;--line-strong:#313a49;--accent:#7d92ff;--accent-soft:#1c2440;
+    --hot:#ff6066;--hot-soft:#33191b;--warn:#e0a638;--warn-soft:#332713;--open:#3ec489;--open-soft:#12291e;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.5;}
+  .wrap{max-width:1120px;margin:0 auto;padding:28px 20px 64px;}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:600;}
+  h1{font-size:26px;line-height:1.15;margin:2px 0 0;font-weight:700;letter-spacing:-.01em;text-wrap:balance;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .q{background:var(--accent-soft);color:var(--accent);padding:2px 10px;border-radius:8px;font-size:20px;}
+  .sub{color:var(--muted);font-size:14px;margin-top:6px;max-width:66ch;}
+
+  .verdict{display:flex;gap:16px;align-items:flex-start;margin:22px 0 30px;background:var(--surface);
+    border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .verdict::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--hot);}
+  .vpill{flex:none;font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px;white-space:nowrap;
+    background:var(--hot-soft);color:var(--hot);height:fit-content;}
+  .vtext{font-size:14.5px;}
+  .vtext b{font-weight:700;}
+  .vmeta{color:var(--muted);font-size:13px;margin-top:5px;}
+
+  .section{margin-bottom:34px;}
+  .shead{display:flex;align-items:baseline;gap:10px;margin-bottom:4px;}
+  .shead h2{font-size:17px;margin:0;font-weight:700;letter-spacing:-.01em;}
+  .scount{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;
+    background:var(--surface);border:1px solid var(--line);padding:2px 9px;border-radius:999px;}
+  .sdesc{font-size:13px;color:var(--muted);margin:0 0 14px;}
+  .sdesc .fire{color:var(--hot);font-weight:600;}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;}
+  .card{display:flex;gap:13px;padding:13px;background:var(--surface);border:1px solid var(--line);border-radius:13px;
+    text-decoration:none;color:inherit;transition:transform .12s,border-color .12s,box-shadow .12s;}
+  .card:hover{transform:translateY(-2px);border-color:var(--line-strong);box-shadow:var(--shadow);}
+  .card:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .icon{width:64px;height:64px;border-radius:15px;flex:none;border:1px solid var(--line);background:var(--surface-2);object-fit:cover;}
+  .body{min-width:0;flex:1;}
+  .name{font-weight:650;font-size:15px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .studio{color:var(--muted);font-size:12.5px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .stats{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:12.5px;font-variant-numeric:tabular-nums;}
+  .rating{font-weight:600;display:inline-flex;align-items:center;gap:4px;}
+  .stars{color:var(--warn);letter-spacing:-1px;font-size:11px;}
+  .reviews{color:var(--faint);}
+  .reach{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap;}
+  .badge{font-size:11px;font-weight:600;padding:3px 8px;border-radius:7px;display:inline-flex;align-items:center;gap:4px;font-variant-numeric:tabular-nums;}
+  .badge.dl{background:var(--accent-soft);color:var(--accent);}
+  .badge.ap{background:var(--surface-2);color:var(--muted);border:1px solid var(--line);}
+  .badge.ap.muted{color:var(--faint);}
+  .badge.store{background:var(--surface-2);color:var(--muted);border:1px solid var(--line);
+    text-decoration:none;cursor:pointer;}
+  .badge.store:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);}
+  .badge.store:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
+  .badge.age.hot{background:var(--hot-soft);color:var(--hot);}
+  .badge.age.warn{background:var(--warn-soft);color:var(--warn);}
+  .badge.unk{background:var(--surface-2);color:var(--faint);border:1px dashed var(--line-strong);}
+
+  .note{margin-top:8px;font-size:12.5px;color:var(--faint);border-top:1px solid var(--line);padding-top:14px;line-height:1.6;}
+  .note b{color:var(--muted);}
+  .filter{width:100%;margin:0 0 26px;padding:11px 14px;font-size:14px;color:var(--ink);
+    background:var(--surface);border:1px solid var(--line);border-radius:10px;font-family:inherit;}
+  .filter:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent);}
+  .filter::placeholder{color:var(--faint);}
+
+  .ctl{margin-left:auto;font-size:12.5px;color:var(--muted);display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .ctl select{font:inherit;font-size:12.5px;color:var(--ink);background:var(--surface);
+    border:1px solid var(--line);border-radius:8px;padding:4px 8px;}
+  .ctl select:focus{outline:2px solid var(--accent);outline-offset:1px;}
+  .pills{display:inline-flex;gap:4px;margin-left:4px;}
+  .pill{font:inherit;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);
+    border:1px solid var(--line);border-radius:999px;padding:4px 11px;cursor:pointer;}
+  .pill:hover{border-color:var(--line-strong);color:var(--ink);}
+  .pill.active{background:var(--accent-soft);color:var(--accent);border-color:transparent;}
+  .pill:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
+
+  .sdesc.hint{margin:12px 0 0;color:var(--faint);font-style:italic;}
+  .sdesc.hint:empty{display:none;}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="kicker">Game Recon · idea check</div>
+    <h1>Similar games for <span class="q">{{QUERY}}</span></h1>
+    <div class="sub">{{SUBLINE}}</div>
+  </header>
+
+  <input class="filter" id="filter" type="search" placeholder="Type to filter {{NTOTAL}} games… e.g. {{FILTER_HINT}}" aria-label="Filter games">
+
+  <section class="section">
+    <div class="shead">
+      <h2>🌱 Fresh launches</h2><span class="scount" id="fresh-count"></span>
+      <span class="ctl">launched within
+        <select id="period" aria-label="Fresh period">
+          <option value="30">1 month</option>
+          <option value="60" selected>2 months</option>
+          <option value="91">3 months</option>
+          <option value="122">4 months</option>
+          <option value="152">5 months</option>
+          <option value="183">6 months</option>
+          <option value="213">7 months</option>
+          <option value="243">8 months</option>
+          <option value="274">9 months</option>
+          <option value="304">10 months</option>
+          <option value="335">11 months</option>
+          <option value="365">12 months</option>
+          <option value="all">1 year + (all)</option>
+        </select>
+        · sort by
+        <select id="fsort" aria-label="Fresh sorting">
+          <option value="relevance" selected>most relevant</option>
+          <option value="recency">newest</option>
+          <option value="downloads">most downloaded</option>
+        </select>
+      </span>
+    </div>
+    <p class="sdesc"><span class="fire">The early-warning lane.</span> Every game under 1M downloads, viewed through the time dial — spot someone shipping your idea before it shows up anywhere else, even at 0 downloads. Widen to “1 year + (all)” to see everything ever launched.</p>
+    <div class="grid" id="grid-fresh"></div>
+    <p class="sdesc hint" id="fresh-hidden"></p>
+  </section>
+
+  <section class="section">
+    <div class="shead">
+      <h2>🏆 Established</h2><span class="scount" id="estab-count"></span>
+      <span class="ctl">rank by
+        <select id="rank" aria-label="Ranking">
+          <option value="relevance" selected>most relevant</option>
+          <option value="downloads">most downloaded</option>
+          <option value="recency">newest</option>
+          <option value="revenue" disabled>revenue — needs AppMagic, coming later</option>
+        </select>
+      </span>
+    </div>
+    <p class="sdesc">Every proven game — <b>1M+ downloads</b>, any age — biggest first. This is who actually owns the space; a recent age badge here means a new game that's already winning.</p>
+    <div class="grid" id="grid-estab"></div>
+  </section>
+
+  <div class="note">
+    <b>All data is live and real</b> — pulled just now from the <b>App Store</b> (★ ratings, review counts) and <b>Google Play</b> (▼ real install counts). Games found on both stores are merged into one card with both badges. <b>iOS</b> = App Store, <b>Play</b> = Google Play.
+  </div>
+
+  <div id="pool" hidden>
+    {{ALL_ROWS}}
+  </div>
+</div>
+<script>
+  var pool=document.getElementById('pool');
+  var grids={fresh:document.getElementById('grid-fresh'),
+             estab:document.getElementById('grid-estab')};
+  var counts={fresh:document.getElementById('fresh-count'),
+              estab:document.getElementById('estab-count')};
+  var hiddenHint=document.getElementById('fresh-hidden');
+  var ESTAB_MIN=1000000;
+
+  var sortDim='relevance';
+  var estabSort='relevance';
+  function distribute(){
+    var pv=document.getElementById('period').value;
+    var all=(pv==='all');
+    var period=all?Infinity:parseInt(pv,10);
+    var cards=Array.prototype.slice.call(document.querySelectorAll('#pool .card, .grid .card'));
+    var fresh=[],estab=[],hidden=0,maxDays=1;
+    cards.forEach(function(c){
+      var days=c.dataset.days===''?null:parseInt(c.dataset.days,10);
+      var reach=parseInt(c.dataset.reach,10)||0;
+      if(reach>=ESTAB_MIN) estab.push(c);
+      else if(all||(days!==null&&days<=period)) fresh.push(c);
+      else{c.remove();pool.appendChild(c);hidden++;}
+      if(days!==null) maxDays=Math.max(maxDays,days);
+      var age=c.querySelector('.badge.age');
+      if(age) age.style.display=(days!==null&&days<=365)?'':'none';
+    });
+    // single-choice sort: newest / most relevant / most downloaded
+    if(sortDim==='relevance'){
+      fresh.sort(function(a,b){
+        var d=(+b.dataset.rel)-(+a.dataset.rel);
+        return d!==0?d:(+b.dataset.reach)-(+a.dataset.reach);
+      });
+    }else if(sortDim==='downloads'){
+      fresh.sort(function(a,b){return (+b.dataset.reach)-(+a.dataset.reach);});
+    }else{
+      fresh.sort(function(a,b){
+        var ad=a.dataset.days===''?Infinity:(+a.dataset.days);
+        var bd=b.dataset.days===''?Infinity:(+b.dataset.days);
+        return ad-bd;
+      });
+    }
+    if(estabSort==='relevance'){
+      estab.sort(function(a,b){
+        var d=(+b.dataset.rel)-(+a.dataset.rel);
+        return d!==0?d:(+b.dataset.reach)-(+a.dataset.reach);
+      });
+    }else if(estabSort==='recency'){
+      estab.sort(function(a,b){
+        var ad=a.dataset.days===''?Infinity:(+a.dataset.days);
+        var bd=b.dataset.days===''?Infinity:(+b.dataset.days);
+        return ad-bd;
+      });
+    }else{
+      estab.sort(function(a,b){return (+b.dataset.reach)-(+a.dataset.reach);});
+    }
+    grids.fresh.replaceChildren.apply(grids.fresh,fresh);
+    grids.estab.replaceChildren.apply(grids.estab,estab);
+    counts.fresh.textContent=fresh.length+' games · under 1M';
+    counts.estab.textContent=estab.length+' games · 1M+';
+    hiddenHint.textContent=hidden?('+ '+hidden+' older games not shown — widen the period (or pick “1 year + (all)”) to see every launch ever.'):'';
+  }
+  document.getElementById('period').addEventListener('change',distribute);
+  document.getElementById('fsort').addEventListener('change',function(){
+    sortDim=this.value;
+    distribute();
+  });
+  document.getElementById('rank').addEventListener('change',function(){
+    estabSort=this.value;
+    distribute();
+  });
+  distribute();
+
+  var f=document.getElementById('filter');
+  f.addEventListener('input',function(){
+    var q=f.value.toLowerCase().trim();
+    document.querySelectorAll('.grid .card').forEach(function(c){
+      c.style.display = c.textContent.toLowerCase().indexOf(q)>-1 ? '' : 'none';
+    });
+    // searching should look everywhere: jump to "all" if the query hides in older games
+    if(q && document.getElementById('period').value!=='all'){
+      var pooled=Array.prototype.some.call(pool.querySelectorAll('.card'),function(c){
+        return c.textContent.toLowerCase().indexOf(q)>-1;
+      });
+      if(pooled){
+        document.getElementById('period').value='all';
+        distribute();
+        document.querySelectorAll('.grid .card').forEach(function(c){
+          c.style.display = c.textContent.toLowerCase().indexOf(q)>-1 ? '' : 'none';
+        });
+      }
+    }
+  });
+</script>
