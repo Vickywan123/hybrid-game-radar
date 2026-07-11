@@ -29,7 +29,11 @@ No auto-detection — "arrow drop" is both a valid concept and an exact game tit
 
 ## 3. Search rules
 
-### 3.1 Term generation
+### 3.1 Term generation — three user-selected depths
+
+**The user always chooses search depth before a run** (with time estimates; Precise recommended): **Precise** = input words + their pair combos only (~1–2 min) · **Standard** = + mechanic combos (~3–5 min) · **Comprehensive** = + synonym family (~8–15 min). Both word orders at every depth. Rationale: time scales with term count; only the user knows if this is a quick check or a due-diligence sweep. (Amended 2026-07-11 after v1 measured ~10 min for the always-full net.)
+
+Term building blocks:
 - **Singles** — every input/theme word alone (Apple limit 200, Play 25 hits)
 - **Pairs** — every two-word combo, **in both word orders** (Play's search is order-sensitive: "arrow drop" ≠ "drop arrow")
 - **Full phrase** — the input as typed

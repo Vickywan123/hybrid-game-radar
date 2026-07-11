@@ -10,14 +10,26 @@ OK_GP = ("puzzle", "casual", "board")
 BLOCK_GP = ("sports", "racing")
 TODAY = date.today()
 
-def gen_terms(input_words, synonyms, mechanics):
-    words = list(dict.fromkeys(input_words + synonyms))
-    terms = [" ".join(input_words)]                      # full phrase
-    for a in words:                                      # pairs, both orders
-        for b in list(dict.fromkeys(input_words + mechanics)):
+def gen_terms(input_words, synonyms, mechanics, depth="precise"):
+    """depth: precise = user's words only; standard = + mechanic combos;
+    full = + synonym family. Both word orders always (store search is
+    order-sensitive — spec failure #8)."""
+    iw = list(dict.fromkeys(input_words))
+    terms = [" ".join(iw)]                               # full phrase
+    for a in iw:                                         # input pairs, both orders
+        for b in iw:
             if a != b:
-                terms += [f"{a} {b}", f"{b} {a}"]
-    terms += words                                       # singles
+                terms.append(f"{a} {b}")
+    terms += iw                                          # singles
+    if depth in ("standard", "full"):
+        for a in iw:                                     # + mechanic combos
+            for m in mechanics:
+                terms += [f"{a} {m}", f"{m} {a}"]
+    if depth == "full":
+        for s in synonyms:                               # + synonym family
+            terms.append(s)
+            for b in list(dict.fromkeys(iw + mechanics)):
+                terms += [f"{s} {b}", f"{b} {s}"]
     return list(dict.fromkeys(terms))
 
 def get_json(url, tries=3):
@@ -55,7 +67,7 @@ def title_gate(name, input_words, synonyms, mechanics):
 def main(cfg_path):
     cfg = json.load(open(cfg_path))
     iw, syn, mech = cfg["input_words"], cfg["synonyms"], cfg["mechanics"]
-    terms = gen_terms(iw, syn, mech)
+    terms = gen_terms(iw, syn, mech, cfg.get("depth", "precise"))
     print(f"{len(terms)} search terms")
 
     pool = {}

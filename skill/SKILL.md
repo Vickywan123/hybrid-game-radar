@@ -22,6 +22,17 @@ Two principles override everything:
 
   Why always: "arrow drop" is simultaneously a valid concept and an exact game title, and the two cases anchor keywords differently.
 
+## Step 0.5 — Ask search depth (always, right after input type)
+
+Ask with estimated times; **Precise is the recommended default**:
+
+> How deep should the search go?
+> 1. **Precise (recommended, ~1–2 min)** — only your keywords and their combinations
+> 2. **Standard (~3–5 min)** — + mechanic-word combos (sort/pop/tap…), catches games named by action
+> 3. **Comprehensive (~8–15 min)** — + synonym family (bead→marble/ball…), the never-miss net
+
+Why ask: search time scales with term count, and only the user knows whether this query is a quick check or a due-diligence sweep. Both word orders are searched at every depth (costs nothing, fixes a real store quirk). Put the choice in config as `"depth": "precise" | "standard" | "full"`.
+
 ## Step 1 — Write config.json
 
 Derive with judgment (this is your creative contribution; the scripts are mechanical):
@@ -39,7 +50,7 @@ Derive with judgment (this is your creative contribution; the scripts are mechan
  "synonyms":["marble","bead","ball"],
  "mechanics":["sort","pull","pop","loop","out","chain","tap"],
  "subline":"Every similar game across the App Store and Google Play, nothing capped. Fresh launches follow the time dial; Established = 1M+ downloads.",
- "filter_hint":"“sort”, “pop”","pin":"Arrow Drop",
+ "filter_hint":"“sort”, “pop”","pin":"Arrow Drop","depth":"precise",
  "workdir":"<absolute workdir path>"}
 ```
 
