@@ -44,7 +44,9 @@ def fetch_icon_64(url):
 
 def badges(r):
     b = ""
-    if r["days"] is not None:
+    if r["days"] is not None and r["days"] < 0:
+        b += '<span class="badge age hot">◷ upcoming</span>'
+    elif r["days"] is not None:
         cls = "hot" if r["days"] <= 21 else "warn"
         b += f'<span class="badge age {cls}">◷ {r["days"]}d ago</span>'
     else:
@@ -67,7 +69,7 @@ def num_line(r):
     return "".join(parts)
 
 def card(r):
-    days = "" if r["days"] is None else str(r["days"])
+    days = "" if r["days"] is None else str(max(0, r["days"]))
     return (f'<div class="card" data-days="{days}" data-reach="{r.get("reach",0)}" '
             f'data-rel="{r.get("rel",0)}">'
             f'<img class="icon" src="{r.get("iconData","")}" alt="" loading="lazy" width="64" height="64">'

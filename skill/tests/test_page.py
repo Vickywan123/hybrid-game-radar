@@ -22,6 +22,12 @@ def test_render():
     # pin: pinned game must be the first card
     h2 = render(list(reversed(games)), TPL, "arrow drop", "s", "x", pin="Arrow Drop")
     assert h2.find("Arrow Drop") < h2.find("Old Nameless")
+    # future-dated game: "upcoming" badge, sorts as day 0 (never negative)
+    fut = [{"name": "Future Game", "studio": "S", "days": -52, "reach": 0, "rel": 0,
+            "ios": {"rating": 0, "ratings": 0, "url": "https://apps.apple.com/f", "icon": None},
+            "android": None, "iconData": ""}]
+    h3 = render(fut, TPL, "q", "s", "x")
+    assert "upcoming" in h3 and 'data-days="0"' in h3 and "-52" not in h3
     print("test_render OK")
 
 test_render()

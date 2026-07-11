@@ -21,4 +21,20 @@ def test_merge_and_tiers():
     assert by["Marble Sort! - Color Puzzle"] < 500       # tier 2
     print("test_merge_and_tiers OK")
 
+def test_title_merge_across_studio_names():
+    recs = [
+        {"name": "Pixel Flow!", "studio": "Loom Games Oyun Yazilim ve Pazarlama Anonim Sirketi",
+         "days": 328, "ios": {"rating": 4.7, "ratings": 117290, "url": "https://apps.apple.com/pf", "icon": None},
+         "android": None},
+        {"name": "Pixel Flow!", "studio": "Loom Games A.Ş.", "days": 300,
+         "ios": None, "android": {"installs": "10,000,000+", "num": 10000000, "score": 4.5,
+                                  "url": "https://play.google.com/pf", "icon": None}},
+    ]
+    from merge_score import merge
+    out = merge(recs)
+    assert len(out) == 1 and out[0]["ios"] and out[0]["android"], "same-title cross-store merge failed"
+    assert out[0]["days"] == 300
+    print("test_title_merge_across_studio_names OK")
+
 test_merge_and_tiers()
+test_title_merge_across_studio_names()

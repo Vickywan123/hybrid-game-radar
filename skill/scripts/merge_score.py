@@ -13,6 +13,25 @@ def merge(records):
     for r in records:
         by_studio.setdefault(na(r["studio"]), []).append(r)
     gone = set()
+    # pass 0: identical full title + complementary stores — merges the same
+    # game across different legal studio names per store (Pixel Flow! case)
+    by_title = {}
+    for r in records:
+        by_title.setdefault(na(r["name"]), []).append(r)
+    for grp in by_title.values():
+        for i, a in enumerate(grp):
+            for b in grp[i + 1:]:
+                if id(a) in gone or id(b) in gone: continue
+                if a["ios"] and not a["android"] and b["android"] and not b["ios"]:
+                    keep, drop = a, b
+                elif b["ios"] and not b["android"] and a["android"] and not a["ios"]:
+                    keep, drop = b, a
+                else:
+                    continue
+                keep["android"] = drop["android"]
+                if drop["days"] is not None and (keep["days"] is None or drop["days"] < keep["days"]):
+                    keep["days"] = drop["days"]
+                gone.add(id(drop))
     for grp in by_studio.values():
         for i, a in enumerate(grp):
             for b in grp[i + 1:]:
