@@ -34,6 +34,8 @@ def test_render():
     assert 'class="shots"' in h4 and h4.count('class="shot"') == 2
     h5 = render([games[1]], TPL, "q", "s", "x")
     assert 'class="shots"' not in h5
+    # hovered card must rise above siblings or the shots panel is covered
+    assert "z-index:30" in TPL.split(".card:hover{")[1][:120]
     print("test_render OK")
 
 test_render()
