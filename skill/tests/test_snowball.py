@@ -30,5 +30,21 @@ def test_mine_ignores_stopwords():
     assert out == [], f"stopwords leaked: {out}"
     print("test_mine_ignores_stopwords OK")
 
+def test_yarn_generic_leak():
+    """Yarn run leaked generic words (color/away/sorting). Variants of known
+    words and hyper-casual filler must not be mined."""
+    verified = ["Yarn Sort 3D: Jam Puzzle", "Wool Color Sort: Yarn Stitch",
+                "Knit Away - Yarn 3D", "Wool Craze 2 - Yarn Sort Games",
+                "Yarn Spool: Knit Color Sort", "Wool Sorting: Unravel Yarn 3D",
+                "Yarn Roll: Unravel Knit Sort"]
+    known = ["yarn", "conveyor", "wool", "thread", "knit", "string",
+             "sort", "wind", "weave", "loop", "tangle", "jam"]
+    mined, _ = snowball_terms(verified, ["yarn", "conveyor"], known)
+    for bad in ["color", "colors", "away", "craze", "sorting"]:
+        assert bad not in mined, f"generic leak: {mined}"
+    assert "unravel" in mined or "spool" in mined or "roll" in mined, f"real vocab lost: {mined}"
+    print(f"test_yarn_generic_leak OK (mined={mined})")
+
 test_pixel_flow_class()
 test_mine_ignores_stopwords()
+test_yarn_generic_leak()

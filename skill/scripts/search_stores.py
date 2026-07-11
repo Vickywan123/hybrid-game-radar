@@ -66,7 +66,17 @@ STOP = {"game", "games", "puzzle", "puzzles", "free", "new", "best", "fun",
         "plus", "king", "big", "little", "the", "and", "for", "with", "your",
         "of", "my", "in", "out", "up", "go", "no", "is", "it", "this",
         "2d", "3d", "offline", "online", "adventure", "challenge", "brain",
-        "epic", "ultimate", "crazy", "happy", "world", "story", "journey"}
+        "epic", "ultimate", "crazy", "happy", "world", "story", "journey",
+        "color", "colors", "colorful", "away", "craze", "crush", "rescue",
+        "match", "matching", "relax", "relaxing", "cozy", "satisfying",
+        "asmr", "art", "hero", "jam", "blast", "pop", "sort", "sorting"}
+
+def _is_known(w, known):
+    """Word variants count as known: 'sorting'~'sort', 'colors'~'color'."""
+    if w in known:
+        return True
+    return any((len(k) >= 4 and w.startswith(k)) or (len(w) >= 4 and k.startswith(w))
+               for k in known)
 
 def mine_new_words(verified_names, known_words, top_n=5):
     """Extract the most frequent unknown words from mechanic-verified titles."""
@@ -74,7 +84,7 @@ def mine_new_words(verified_names, known_words, top_n=5):
     counts = Counter()
     for name in verified_names:
         for w in re.findall(r"[a-z]{3,}", name.lower()):
-            if w not in known:
+            if not _is_known(w, known):
                 counts[w] += 1
     return [w for w, _ in counts.most_common(top_n)]
 
