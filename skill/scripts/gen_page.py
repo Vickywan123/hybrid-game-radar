@@ -42,6 +42,37 @@ def fetch_icon_64(url):
         pass
     return ""
 
+def fetch_shot_120(url):
+    """Store screenshot shrunk to 120px height JPEG. Cached; empty on failure."""
+    if not url: return ""
+    try:
+        p = _icon_cache_path("shot" + url)
+        if os.path.exists(p):
+            return open(p).read()
+    except Exception:
+        pass
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=15, context=CTX) as r:
+            raw = r.read()
+        with tempfile.TemporaryDirectory() as d:
+            src, dst = f"{d}/i.bin", f"{d}/o.jpg"
+            open(src, "wb").write(raw)
+            pr = subprocess.run(["sips", "--resampleHeight", "120", "-s", "format", "jpeg",
+                                 "-s", "formatOptions", "50", src, "--out", dst],
+                                capture_output=True)
+            if pr.returncode == 0:
+                data = "data:image/jpeg;base64," + base64.b64encode(open(dst, "rb").read()).decode()
+                try:
+                    os.makedirs(CACHE_DIR, exist_ok=True)
+                    open(_icon_cache_path("shot" + url), "w").write(data)
+                except Exception:
+                    pass
+                return data
+    except Exception:
+        pass
+    return ""
+
 def badges(r):
     b = ""
     if r["days"] is not None and r["days"] < 0:
@@ -70,13 +101,16 @@ def num_line(r):
 
 def card(r):
     days = "" if r["days"] is None else str(max(0, r["days"]))
+    shots = "".join(f'<img class="shot" src="{d}" alt="" loading="lazy">'
+                    for d in (r.get("shotsData") or []) if d)
+    panel = f'<div class="shots">{shots}</div>' if shots else ""
     return (f'<div class="card" data-days="{days}" data-reach="{r.get("reach",0)}" '
             f'data-rel="{r.get("rel",0)}">'
             f'<img class="icon" src="{r.get("iconData","")}" alt="" loading="lazy" width="64" height="64">'
             f'<div class="body"><div class="name">{esc(r["name"])}</div>'
             f'<div class="studio">{esc(r["studio"])}</div>'
             f'<div class="reach">{badges(r)}</div>'
-            f'<div class="reach">{num_line(r)}</div></div></div>')
+            f'<div class="reach">{num_line(r)}</div></div>{panel}</div>')
 
 def render(games, template_str, query, subline, filter_hint, pin=None):
     if pin:
@@ -103,6 +137,13 @@ def main(cfg_path):
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
         list(ex.map(_fill, need))
     print(f"  icons fetched: {len(need)} (parallel, cached)")
+    sneed = [g for g in games if not g.get("shotsData")]
+    def _fill_shots(g):
+        urls = ((g.get("ios") or {}).get("shots") or (g.get("android") or {}).get("shots") or [])[:4]
+        g["shotsData"] = [fetch_shot_120(u) for u in urls]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
+        list(ex.map(_fill_shots, sneed))
+    print(f"  screenshots fetched for {len(sneed)} games (parallel, cached)")
     tpl = open(os.path.join(os.path.dirname(__file__), "..", "assets", "template.html")).read()
     out = render(games, tpl, cfg["query"], cfg.get("subline", ""),
                  cfg.get("filter_hint", "“sort”"), cfg.get("pin"))

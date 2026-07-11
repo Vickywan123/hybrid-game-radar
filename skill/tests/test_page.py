@@ -28,6 +28,12 @@ def test_render():
             "android": None, "iconData": ""}]
     h3 = render(fut, TPL, "q", "s", "x")
     assert "upcoming" in h3 and 'data-days="0"' in h3 and "-52" not in h3
+    # hover screenshots: panel present only when shots exist
+    sh = [dict(games[0])]; sh[0]["shotsData"] = ["data:image/jpeg;base64,AAA", "data:image/jpeg;base64,BBB"]
+    h4 = render(sh, TPL, "q", "s", "x")
+    assert 'class="shots"' in h4 and h4.count('class="shot"') == 2
+    h5 = render([games[1]], TPL, "q", "s", "x")
+    assert 'class="shots"' not in h5
     print("test_render OK")
 
 test_render()

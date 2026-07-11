@@ -167,7 +167,8 @@ def run_sweep(pool, terms, fam, mech, platforms, label):
                     "days": days_from_iso(r.get("releaseDate", "")),
                     "ios": {"rating": r.get("averageUserRating", 0) or 0,
                             "ratings": r.get("userRatingCount", 0) or 0,
-                            "url": r["trackViewUrl"], "icon": r.get("artworkUrl100")},
+                            "url": r["trackViewUrl"], "icon": r.get("artworkUrl100"),
+                            "shots": (r.get("screenshotUrls") or [])[:4]},
                     "android": None}
         print(f"  {label} apple done: {len(terms)} terms")
     # ---- Google Play: cached, serial (parallel gets IP-blocked) ----
@@ -204,7 +205,8 @@ def run_sweep(pool, terms, fam, mech, platforms, label):
                                 "num": installs_num(d.get("installs")),
                                 "score": d.get("score") or 0,
                                 "url": f"https://play.google.com/store/apps/details?id={r['appId']}",
-                                "icon": d.get("icon")}}
+                                "icon": d.get("icon"),
+                                "shots": (d.get("screenshots") or [])[:4]}}
             if i % 10 == 0: print(f"  {label} gp {i}/{len(terms)}")
         print(f"  {label} gp done")
 
