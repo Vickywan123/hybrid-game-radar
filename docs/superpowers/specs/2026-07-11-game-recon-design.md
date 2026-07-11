@@ -41,7 +41,7 @@ Term building blocks:
 - **Mechanic combos** — action words without the object ("arrow drop", "drop sort", "arrow pop")
 
 ### 3.2 Sources & platform choice
-Apple iTunes Search API (free, keyless) + Google Play via `google-play-scraper`. US storefront default. **The user chooses platforms per run: both (default) / Apple only / Android only.** Apple requests run in parallel (8 workers — Apple tolerates it); Google Play stays serial (parallel access gets IP-blocked). (Amended 2026-07-11.)
+Apple iTunes Search API (free, keyless) + Google Play via `google-play-scraper`. US storefront default. **The user chooses platforms per run: both (default) / Apple only / Android only.** Apple requests run in parallel (8 workers); Google Play searches are serial but detail fetches run gently parallel (3 workers, jittered). Snowball GP details capped at 100. Descriptions come from the gp_app cache + batched Apple lookups. Two-phase delivery: wave-1 page published at ~2–3 min, snowball updates the same URL. (Amended 2026-07-11 for the 3-minute target.)
 
 ### 3.3 Filtering — four gates
 1. **Games only** (Apple `primaryGenreName == "Games"`)
@@ -92,7 +92,7 @@ One self-contained web page (Artifact), fresh data per run, one page per concept
 
 No long-tail bucket — it lives at the dial's "all" stop. Hidden-count hint ("+N older games not shown — widen the period"). Nothing silently dropped.
 
-**5.4 Cards** — 64px embedded icon (page ~1MB at 300+ games) · name + studio · age badge (red ≤3 weeks / amber older / dashed **"date unknown"** when the store publishes no date) · separately clickable **iOS ↗ / Play ↗** badges (no whole-card link) · Play install bucket + Apple ★rating·reviews side by side.
+**5.4 Cards** — 64px embedded icon · name + studio · age badge (red ≤3 weeks / amber older / dashed **"date unknown"** / red **"upcoming"** for future dates) · separately clickable **iOS ↗ / Play ↗** badges · Play installs + Apple ★rating·reviews side by side. **Hover screenshot panel** (up to 4 store screenshots, 200px, embedded): **Fresh-tier games only** — devs already know the 1M+ hits (user decision 2026-07-11).
 
 **5.5 Filter box** — live text filter; if a query only matches dial-hidden games, the page auto-widens to "all" — search never falsely empty.
 

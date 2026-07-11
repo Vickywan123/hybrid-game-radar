@@ -26,12 +26,12 @@ Two principles override everything:
 
 **Depth** — ask with estimated times; **Precise is the recommended default**:
 
-> How deep should the search go? (times are END-TO-END for a first run, incl. judgment, snowball and page build; repeat/similar searches are much faster thanks to the cache)
-> 1. **Precise (recommended, ~3–8 min total)** — only your keywords and their combinations
-> 2. **Standard (~10–25 min total)** — + mechanic-word combos (sort/pop/tap…), catches games named by action
-> 3. **Comprehensive (~20–40 min total)** — + synonym family (bead→marble/ball…), the never-miss net
+> How deep should the search go? (END-TO-END times for a first run; cache makes repeats much faster)
+> 1. **Precise (recommended, ~2–3 min total)** — only your keywords and their combinations
+> 2. **Standard (~4–6 min total)** — + mechanic-word combos (sort/pop/tap…), catches games named by action
+> 3. **Comprehensive (~8–15 min total)** — + synonym family (bead→marble/ball…), the never-miss net
 
-The snowball stage's cost scales with how many NEW games it discovers — first runs on a fresh concept are the slowest; re-runs are cheap.
+**Two-phase delivery:** publish the wave-1 page as soon as search+judgment finish (~2–3 min), tell the user the link is live and that the snowball wave will update the SAME link a few minutes later. Then run snowball + round-2 judgment + regenerate + republish the same file path.
 
 **Platforms:**
 
@@ -90,7 +90,7 @@ $PY $SKILL_DIR/scripts/apply_exclusions.py <workdir>/config.json
 Same mechanic often hides under completely different names ("Pixel Flow!" vs "This is Blast!" — zero shared words). The snowball mines new vocabulary from the titles you just VERIFIED (judgment set minus exclusions) and sweeps the stores again:
 
 ```bash
-$PY $SKILL_DIR/scripts/snowball.py <workdir>/config.json   # ~1–3 min
+$PY $SKILL_DIR/scripts/snowball.py <workdir>/config.json   # capped: ≤100 GP detail fetches
 ```
 
 It appends new gate-passing games to games.json and writes their names to `<workdir>/snowball_new.json`. **Judge that list too** (round 2 — usually small; use store descriptions or your own knowledge of well-known titles): append wrong-mechanic names to `<workdir>/exclusions.json`, re-run apply_exclusions, then build the page:

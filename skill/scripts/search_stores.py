@@ -2,7 +2,7 @@
 """Search Apple + Google Play for a concept. Spec: design doc §3.1-3.3, 3.5, 3.6.
 The post-judgment snowball wave lives in snowball.py (spec failure #17)."""
 import urllib.request, urllib.parse, ssl, json, re, sys, time
-import concurrent.futures, hashlib, os
+import concurrent.futures, hashlib, os, random
 from collections import Counter
 from datetime import date, datetime
 
@@ -147,7 +147,7 @@ def apple_fetch(t):
         cache_put("apple_search", t, results)
     return t, results
 
-def run_sweep(pool, terms, fam, mech, platforms, label):
+def run_sweep(pool, terms, fam, mech, platforms, label, gp_detail_cap=None):
     """Sweep both stores for `terms`, adding gate-passing games to `pool`
     (dict keyed by (store, id)). Reused by search_stores and snowball."""
     # ---- Apple: cached + parallel (Apple tolerates concurrency) ----
@@ -171,10 +171,10 @@ def run_sweep(pool, terms, fam, mech, platforms, label):
                             "shots": (r.get("screenshotUrls") or [])[:4]},
                     "android": None}
         print(f"  {label} apple done: {len(terms)} terms")
-    # ---- Google Play: cached, serial (parallel gets IP-blocked) ----
+    # ---- Google Play: searches serial, detail fetches gently parallel (x3, jittered) ----
     if platforms in ("both", "android"):
         from google_play_scraper import app as gp_app, search as gp_search
-        seen = set()
+        cand = {}
         for i, t in enumerate(terms):
             hits = cache_get("gp_search", t)
             if hits is None:
@@ -184,31 +184,41 @@ def run_sweep(pool, terms, fam, mech, platforms, label):
                 except Exception:
                     print(f"  gp skip: {t}"); continue
             for r in hits:
-                if r["appId"] in seen or ("g", r["appId"]) in pool: continue
+                if r["appId"] in cand or ("g", r["appId"]) in pool: continue
                 if not title_gate(r["title"], fam, mech): continue
-                seen.add(r["appId"])
-                d = cache_get("gp_app", r["appId"])
-                if d is None:
-                    try:
-                        d = gp_app(r["appId"], lang="en", country="us")
-                        cache_put("gp_app", r["appId"], d)
-                    except Exception:
-                        continue
-                genre = (d.get("genre") or "").lower()
-                if any(b in genre for b in BLOCK_GP): continue
-                if not any(g in genre for g in OK_GP): continue
-                pool[("g", r["appId"])] = {
-                    "name": d["title"], "studio": d["developer"],
-                    "days": days_from_gp(d.get("released") or ""),
-                    "ios": None,
-                    "android": {"installs": d.get("installs", "?"),
-                                "num": installs_num(d.get("installs")),
-                                "score": d.get("score") or 0,
-                                "url": f"https://play.google.com/store/apps/details?id={r['appId']}",
-                                "icon": d.get("icon"),
-                                "shots": (d.get("screenshots") or [])[:4]}}
-            if i % 10 == 0: print(f"  {label} gp {i}/{len(terms)}")
-        print(f"  {label} gp done")
+                cand[r["appId"]] = True
+        ids = list(cand)
+        if gp_detail_cap is not None:
+            ids = ids[:gp_detail_cap]
+        def fetch_detail(aid):
+            d = cache_get("gp_app", aid)
+            if d is None:
+                try:
+                    time.sleep(random.uniform(0.05, 0.3))
+                    d = gp_app(aid, lang="en", country="us")
+                    cache_put("gp_app", aid, d)
+                except Exception:
+                    return None
+            return aid, d
+        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as ex:
+            results = list(ex.map(fetch_detail, ids))
+        for res in results:
+            if not res: continue
+            aid, d = res
+            genre = (d.get("genre") or "").lower()
+            if any(b in genre for b in BLOCK_GP): continue
+            if not any(g in genre for g in OK_GP): continue
+            pool[("g", aid)] = {
+                "name": d["title"], "studio": d["developer"],
+                "days": days_from_gp(d.get("released") or ""),
+                "ios": None,
+                "android": {"installs": d.get("installs", "?"),
+                            "num": installs_num(d.get("installs")),
+                            "score": d.get("score") or 0,
+                            "url": f"https://play.google.com/store/apps/details?id={aid}",
+                            "icon": d.get("icon"),
+                            "shots": (d.get("screenshots") or [])[:4]}}
+        print(f"  {label} gp done: {len(ids)} details")
 
 def main(cfg_path):
     cfg = json.load(open(cfg_path))

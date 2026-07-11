@@ -36,7 +36,7 @@ def main(cfg_path):
 
     pool = {}
     fam = [w.lower() for w in iw + syn] + mined
-    run_sweep(pool, terms, fam, mech, cfg.get("platforms", "both"), "snowball")
+    run_sweep(pool, terms, fam, mech, cfg.get("platforms", "both"), "snowball", gp_detail_cap=100)
 
     have = {(na(g["name"])[:16], na(g["studio"])) for g in games}
     new = [r for r in pool.values()

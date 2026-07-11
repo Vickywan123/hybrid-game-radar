@@ -134,12 +134,13 @@ def main(cfg_path):
     def _fill(g):
         src = (g.get("ios") or {}).get("icon") or (g.get("android") or {}).get("icon")
         g["iconData"] = fetch_icon_64(src)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=16) as ex:
         list(ex.map(_fill, need))
     print(f"  icons fetched: {len(need)} (parallel, cached)")
     def _shots_eligible(g):
+        # Fresh tier only: devs already know the 1M+ hits (user decision)
         d = g.get("days")
-        return g.get("reach", 0) >= 1_000_000 or (d is not None and 0 <= d <= 180)
+        return g.get("reach", 0) < 1_000_000 and (d is not None and 0 <= d <= 180)
     for g in games:
         if not _shots_eligible(g):
             g["shotsData"] = []
@@ -147,7 +148,7 @@ def main(cfg_path):
     def _fill_shots(g):
         urls = ((g.get("ios") or {}).get("shots") or (g.get("android") or {}).get("shots") or [])[:4]
         g["shotsData"] = [fetch_shot_120(u) for u in urls]
-    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=16) as ex:
         list(ex.map(_fill_shots, sneed))
     print(f"  screenshots fetched for {len(sneed)} games (parallel, cached)")
     tpl = open(os.path.join(os.path.dirname(__file__), "..", "assets", "template.html")).read()
