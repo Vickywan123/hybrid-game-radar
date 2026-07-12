@@ -79,6 +79,8 @@ Individual term failures print `skip` and continue — that is by design (unstab
 
 ## Step 3 — Mechanic judgment (you, not a regex)
 
+**First read `$SKILL_DIR/references/mechanic-taxonomy.md`** — the user-maintained mechanic/skin taxonomy. Assign the anchor/concept to a family row, then judge candidates against that row's vocabulary and its confusables column. The taxonomy's cousin-family notes (jam↔parking, sort↔loop↔hexa) override your genre intuition.
+
 Read `<workdir>/descriptions.json` and judge each game: does its *described mechanic* match the concept family? A shared noun is not a match — "Marble …" titles are frequently Zuma chain-shooters (vocabulary: shoot, aim, chain of balls), a completely different genre; bow/archery and board-game vocabularies are other known impostors.
 
 **Case A: judge against the anchor game's own description, not your genre intuition.** First extract the pinned game's mechanic fingerprint (its description's action vocabulary — e.g. Block Jam: slide, match colors, collect). A candidate matches if its description shares that fingerprint, whatever its skin.
