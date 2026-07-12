@@ -1,5 +1,5 @@
 #!/bin/bash
-# Install/refresh the game-recon skill into ~/.claude/skills
+# Install/refresh the hybrid-game-radar skill into ~/.claude/skills
 set -e
 SRC="$(cd "$(dirname "$0")/skill" && pwd)"
 DST="$HOME/.claude/skills/hybrid-game-radar"
