@@ -112,7 +112,7 @@ Do NOT mine the raw pool instead of verified titles — measured on "blast", raw
 
 ## Step 4 — Deliver
 
-Publish `<workdir>/report.html` as an Artifact. Favicon: 🎯 for concept input, 📷 for screenshot-origin; keep the same emoji across updates of the same report. Re-running the same concept: republish the same file path so the URL stays stable.
+Publish `<workdir>/report.html` as an Artifact. **No Artifact tool on your platform?** (Codex/Gemini/Copilot etc.): copy report.html somewhere permanent and open it in the user's browser (`open report.html` on macOS) — the page is fully self-contained. Favicon: 🎯 for concept input, 📷 for screenshot-origin; keep the same emoji across updates of the same report. Re-running the same concept: republish the same file path so the URL stays stable.
 
 Reply with the link plus 2–3 sentences of plain-language facts (how many games, how many fresh, notable exact matches). Counts only — no advice, no "crowded/open" judgment.
 
