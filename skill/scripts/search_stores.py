@@ -78,7 +78,7 @@ def _is_known(w, known):
     return any((len(k) >= 4 and w.startswith(k)) or (len(w) >= 4 and k.startswith(w))
                for k in known)
 
-def mine_new_words(verified_names, known_words, top_n=5):
+def mine_new_words(verified_names, known_words, top_n=5, with_counts=False):
     """Extract the most frequent unknown words from mechanic-verified titles."""
     known = {w.lower() for w in known_words} | STOP
     counts = Counter()
@@ -86,16 +86,22 @@ def mine_new_words(verified_names, known_words, top_n=5):
         for w in re.findall(r"[a-z]{3,}", name.lower()):
             if not _is_known(w, known):
                 counts[w] += 1
-    return [w for w, _ in counts.most_common(top_n)]
+    top = counts.most_common(top_n)
+    return top if with_counts else [w for w, _ in top]
 
 def snowball_terms(verified_names, input_words, known_words, max_terms=20):
     """Build wave-2 terms from words mined out of verified titles:
     mined singles + mined pairs + mined×input combos, both orders."""
     iw = [w.lower() for w in input_words]
-    mined = mine_new_words(verified_names, list(known_words) + iw)
+    mined_counts = mine_new_words(verified_names, list(known_words) + iw, with_counts=True)
+    mined = [w for w, _ in mined_counts]
     terms = []
-    for a in mined:
-        terms.append(a)                                  # mined singles (highest value)
+    for a, c in mined_counts:
+        # a mined word searched ALONE drags in whole genres ("find" -> hidden
+        # object, "logic" -> logic grids: failure #24). Singles need strong
+        # family evidence (>=3 verified titles); combos below are always safe.
+        if c >= 3:
+            terms.append(a)
     for a in mined:                                      # mined × input combos
         for w in iw:
             terms += [f"{a} {w}", f"{w} {a}"]

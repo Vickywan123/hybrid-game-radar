@@ -123,6 +123,8 @@ No long-tail bucket — it lives at the dial's "all" stop. Hidden-count hint ("+
 | 21 | Snowball mines generic vocabulary | color/away/sorting mined from yarn titles → 445 noise candidates | Known-word variants + hyper-casual filler in STOP; variant-aware known check (§3.1) |
 | 22 | Mechanic-word-only games outrank theme games | "conveyor jam" above yarn games in yarn run | Theme/mechanic input-word classification; theme ×20 dominates (§3.4) |
 | 23 | Same-mechanic games excluded for wearing a different skin | Bus Jam / Car Match judged out of the Block Jam run | Skin is never grounds for exclusion; jam/collection genres span blocks/buses/cars/goods. Wrong exclusions also starve the snowball (§3.3) |
+| 24 | Mined single word drags in whole genres | "find"/"logic"/"frenzy" flooded Seat Away with hidden-object, logic-grid, bingo | Mined singles need ≥3 verified-title occurrences; combos always allowed (verified combos still catch Pixel Flow) (§3.1) |
+| 25 | Lazy round-2 judgment (sampling + regex) | Bingo Frenzy, Cooking Madness reached Established | Round 2 must read every snowball name; no sampling (§3.3) |
 
 **Standing rule:** user reports a miss → diagnose → fix the class, not the instance → add a row here.
 

@@ -20,7 +20,9 @@ def test_pixel_flow_class():
              "pop", "shoot", "match", "color", "jam", "crush", "puzzle"]
     mined, terms = snowball_terms(verified, ["blast"], known)
     assert "pixel" in mined, f"mined={mined}"
-    assert "pixel" in terms                      # mined single term
+    # pixel appears in only 2 verified titles -> no single term (failure #24),
+    # but combos must still exist (verified live: 'pixel blast' finds Pixel Flow!)
+    assert "pixel" not in terms, f"weak single leaked: {terms}"
     assert "pixel blast" in terms or "blast pixel" in terms
     assert not any(w in mined for w in ["bubble", "marble", "ball"])
     print(f"test_pixel_flow_class OK (mined={mined})")
@@ -79,7 +81,21 @@ def test_theme_dominates_mechanic():
     assert by["Thread Jam - Untangle 3D Ropes"] > by["Color Sort Conveyor"], by
     print("test_theme_dominates_mechanic OK")
 
+def test_single_needs_strong_evidence():
+    """Failure #24: 'find'/'logic'/'frenzy' singles flooded the Seat Away run
+    with hidden-object and logic-grid genres. Singles need >=3 verified titles."""
+    verified = ["Find Seat", "Find My Seat",                       # find x2 -> no single
+                "Spool Sort", "Spool Jam", "Spool Away"]           # spool x3 -> single ok
+    known = ["seat", "sort", "jam", "away"]
+    mined, terms = snowball_terms(verified, ["seat"], known)
+    assert "find" in mined and "spool" in mined
+    assert "find" not in terms, f"weak single leaked: {terms}"
+    assert "spool" in terms, f"strong single missing: {terms}"
+    assert "find seat" in terms                                    # combos always allowed
+    print("test_single_needs_strong_evidence OK")
+
 test_pixel_flow_class()
+test_single_needs_strong_evidence()
 test_theme_dominates_mechanic()
 test_mine_ignores_stopwords()
 test_yarn_generic_leak()

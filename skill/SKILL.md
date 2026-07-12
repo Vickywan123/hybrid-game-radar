@@ -97,7 +97,7 @@ Same mechanic often hides under completely different names ("Pixel Flow!" vs "Th
 $PY $SKILL_DIR/scripts/snowball.py <workdir>/config.json   # capped: ≤100 GP detail fetches
 ```
 
-It appends new gate-passing games to games.json and writes their names to `<workdir>/snowball_new.json`. **Judge that list too** (round 2 — usually small; use store descriptions or your own knowledge of well-known titles): append wrong-mechanic names to `<workdir>/exclusions.json`, re-run apply_exclusions, then build the page:
+It appends new gate-passing games to games.json and writes their names to `<workdir>/snowball_new.json`. **Judge that list too — read EVERY name, no sampling, no regex-only passes** (failure #25: a lazy round 2 let Bingo and hidden-object games reach the Established section). Use your knowledge of well-known titles; when a whole genre floods in via one mined word, exclude the genre: append wrong-mechanic names to `<workdir>/exclusions.json`, re-run apply_exclusions, then build the page:
 
 ```bash
 $PY $SKILL_DIR/scripts/apply_exclusions.py <workdir>/config.json
