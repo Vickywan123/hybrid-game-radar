@@ -16,16 +16,6 @@ The existing workflow for checking "is my idea taken?" is broken in three specif
 
 3. **Name search misses mechanic clones.** The game that kills your idea might share zero words with your concept ("Pixel Flow!" vs "This is Blast!"). Only mechanic-level matching — reading store descriptions, mining verified titles for the family's real vocabulary — finds those.
 
-## Why it's different
-
-**It was adversarially built.** Every rule in this tool exists because a real hybrid-game developer caught a real miss during development. The design spec carries a [25-entry failure catalog](docs/superpowers/specs/2026-07-11-game-recon-design.md) — each entry a genuine bug (missed game, wrong ranking, false merge) with its root cause and the systematic fix, locked by a regression test. Highlights:
-
-- **"drop arrow" ≠ "arrow drop"** — Google Play's search is word-order sensitive. Every keyword pair is searched in both orders.
-- **Same game, different subtitles per store** — "Sand Balls - Puzzle Game" (Play) and "Sand Balls - Digger Puzzle" (iOS) merge into one card.
-- **Same mechanic, zero shared words** — "Pixel Flow!" is invisible to every "blast" search. The *snowball wave* mines new vocabulary from mechanic-verified titles and sweeps again.
-- **The skin is never the mechanic** — "Marble Legend" titles are usually Zuma shooters (impostors); Bus Jam and Block Jam are the same genre in different skins (family). Judgment reads store *descriptions*, guided by a [user-maintained mechanic taxonomy](skill/references/mechanic-taxonomy.md).
-- **Wrong exclusions must be visible** — every judged-out game appears in a collapsed audit footer on the report, so a mistaken exclusion is catchable at a glance.
-
 ## What a run looks like
 
 ```
