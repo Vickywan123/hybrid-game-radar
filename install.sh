@@ -2,7 +2,7 @@
 # Install/refresh the game-recon skill into ~/.claude/skills
 set -e
 SRC="$(cd "$(dirname "$0")/skill" && pwd)"
-DST="$HOME/.claude/skills/game-recon"
+DST="$HOME/.claude/skills/hybrid-game-radar"
 mkdir -p "$DST"
 rsync -a --delete --exclude venv --exclude cache "$SRC/" "$DST/"
 if [ ! -d "$DST/venv" ]; then

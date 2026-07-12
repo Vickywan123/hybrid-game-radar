@@ -1,4 +1,4 @@
-# Game Recon — Design Spec (v1)
+# Hybrid Game Radar (né Game Recon) — Design Spec (v1)
 
 **Date:** 2026-07-11 · **Status:** Approved by user after 6 rounds of adversarial prototype testing
 **Prototype pages:** [concept demo](https://claude.ai/code/artifact/936f6a65-823c-4a0c-b117-aeded5202452) · [Case A demo](https://claude.ai/code/artifact/a5a250a6-747b-4289-b0d2-1b46e2d5d82c)

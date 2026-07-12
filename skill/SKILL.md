@@ -1,11 +1,11 @@
 ---
-name: game-recon
+name: hybrid-game-radar
 description: Search iOS App Store + Google Play for games similar to a concept, game name, store link, or screenshot, and deliver a visual competitive-landscape report page (Fresh launches vs Established 1M+). Use this whenever a game developer wants to know if an idea already exists, asks for similar games, competitor check, market check for a hybrid-game idea, shares a game screenshot or store link asking what's like it, or says "recon", "similar games", "check this idea", "has someone made this", "查竞品", "找类似游戏", "有没有类似的游戏". Trigger even if they don't say "search" — any question about whether a game idea is already taken belongs here.
 ---
 
-# Game Recon
+# Hybrid Game Radar
 
-Find every similar game on both stores so a hybrid-game developer never builds something that already exists. The binding design contract is `docs/superpowers/specs/2026-07-11-game-recon-design.md` in the game-recon repo — its §6 failure table records real misses users caught; never reintroduce them.
+Find every similar game on both stores so a hybrid-game developer never builds something that already exists. The binding design contract is `docs/superpowers/specs/2026-07-11-game-recon-design.md` in the hybrid-game-radar repo — its §6 failure table records real misses users caught; never reintroduce them.
 
 Two principles override everything:
 1. **Completeness beats tidiness.** A missed competitor costs the user months of wasted development. Never cap, trim, or curate results.

@@ -1,4 +1,4 @@
-# 🎯 Game Recon
+# 🎯 Hybrid Game Radar
 
 **A Claude Code skill that answers a game developer's most expensive question: *"Has someone already built this idea — and is it working?"***
 
@@ -10,9 +10,9 @@ Built for hybrid-casual game developers, where two studios routinely ship the sa
 
 The existing workflow for checking "is my idea taken?" is broken in three specific ways:
 
-1. **Third-party ranking/publisher platforms can't handle multi-keyword search.** Type "arrow sand puzzle" into most industry dashboards and you get *zero results* — the query is matched as one frozen phrase, so multi-mechanic hybrid concepts (which is what everyone builds now) collapse to nothing. Game Recon decomposes your keywords into singles, pairs (both word orders — the stores are order-sensitive), and phrases, then pools everything.
+1. **Third-party ranking/publisher platforms can't handle multi-keyword search.** Type "arrow sand puzzle" into most industry dashboards and you get *zero results* — the query is matched as one frozen phrase, so multi-mechanic hybrid concepts (which is what everyone builds now) collapse to nothing. Hybrid Game Radar decomposes your keywords into singles, pairs (both word orders — the stores are order-sensitive), and phrases, then pools everything.
 
-2. **There is no unified cross-store search.** Today you search the App Store, then separately search Google Play, then manually reconcile the two lists — same game, different subtitles, different developer legal names per store. Game Recon searches both stores in one run and merges duplicates into single cards showing both stores' numbers side by side.
+2. **There is no unified cross-store search.** Today you search the App Store, then separately search Google Play, then manually reconcile the two lists — same game, different subtitles, different developer legal names per store. Hybrid Game Radar searches both stores in one run and merges duplicates into single cards showing both stores' numbers side by side.
 
 3. **Name search misses mechanic clones.** The game that kills your idea might share zero words with your concept ("Pixel Flow!" vs "This is Blast!"). Only mechanic-level matching — reading store descriptions, mining verified titles for the family's real vocabulary — finds those.
 
@@ -45,9 +45,9 @@ The report is a single self-contained HTML page: filterable, light/dark aware, m
 Requires: [Claude Code](https://claude.com/claude-code), Python 3, macOS (uses `sips` for image resizing — Linux users: swap in Pillow).
 
 ```bash
-git clone https://github.com/Vickywan123/game-recon.git
-cd game-recon
-./install.sh          # copies the skill to ~/.claude/skills/game-recon + creates its venv
+git clone https://github.com/Vickywan123/hybrid-game-radar.git
+cd hybrid-game-radar
+./install.sh          # copies the skill to ~/.claude/skills/hybrid-game-radar + creates its venv
 ```
 
 Then in any Claude Code conversation:
@@ -88,7 +88,7 @@ US storefront only (for now) · revenue ranking disabled pending AppMagic integr
 
 **为什么做这个工具**：现有的第三方排行/发行平台大多不支持多关键词搜索——输入"arrow sand puzzle"直接零结果，混合玩法概念根本查不了；而且查竞品要先搜 iOS、再单独搜安卓，同一款游戏两边名字还不一样，全靠人肉对账。
 
-Game Recon 是一个 Claude Code 技能：输入玩法概念、游戏名、商店链接或截图，**一次跑完苹果+谷歌双商店**，多关键词自动拆解组合（正反词序都搜），按**机制**（而非名字）判断相似性，双商店同款自动合并，输出可交互的竞品全景报告——新品雷达 + 1M+ 老将、悬停截图、可审计的剔除清单。为混合休闲游戏开发者打造：在立项前发现"这个想法有没有人做过、做得怎么样"。工具的全部 25 条规则都来自真实开发者的实测纠错，每条都有回归测试锁定。
+Hybrid Game Radar 是一个 Claude Code 技能：输入玩法概念、游戏名、商店链接或截图，**一次跑完苹果+谷歌双商店**，多关键词自动拆解组合（正反词序都搜），按**机制**（而非名字）判断相似性，双商店同款自动合并，输出可交互的竞品全景报告——新品雷达 + 1M+ 老将、悬停截图、可审计的剔除清单。为混合休闲游戏开发者打造：在立项前发现"这个想法有没有人做过、做得怎么样"。工具的全部 25 条规则都来自真实开发者的实测纠错，每条都有回归测试锁定。
 
 ## License
 
