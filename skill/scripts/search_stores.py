@@ -142,15 +142,19 @@ def title_gate(name, fam, mechanics):
     return sum(1 for w in mechanics if w in n) >= 2      # gate 3
 
 def apple_fetch(t):
-    cached = cache_get("apple_search", t)
+    # genreId=6014 = Apple's "Games" umbrella (covers Puzzle AND Casual sub-tags):
+    # server-side filtering means all 200 result slots go to actual games
+    # instead of being wasted on wallpaper/tool apps. Never filter to the
+    # Puzzle sub-genre (7012) — many hybrid games are tagged Casual.
+    cached = cache_get("apple_search", "g6014:" + t)
     if cached is not None:
         return t, cached
     limit = 200 if " " not in t else 50
     d = get_json("https://itunes.apple.com/search?term="
-                 f"{urllib.parse.quote(t)}&entity=software&limit={limit}&country=us")
+                 f"{urllib.parse.quote(t)}&entity=software&limit={limit}&country=us&genreId=6014")
     results = d.get("results", []) if d else None
     if results is not None:
-        cache_put("apple_search", t, results)
+        cache_put("apple_search", "g6014:" + t, results)
     return t, results
 
 def run_sweep(pool, terms, fam, mech, platforms, label, gp_detail_cap=None):
