@@ -46,7 +46,12 @@ Why ask: time scales with term count and Google Play is the slow half; only the 
 
 ## Step 1 — Write config.json
 
-Derive with judgment (this is your creative contribution; the scripts are mechanical):
+**Before anything: classify the concept/anchor into a taxonomy family** (`$SKILL_DIR/references/mechanic-taxonomy.md`). The family then seeds the config (failure #26 — an ant picture-clearing concept missed This is Blast/Pixel Flow because search was anchored on the literal words only; the family's canonical hits share zero words with the skin):
+
+- The family's **canonical hits** must appear in the report — look them up directly and include their title words in search terms.
+- The family's **skins column** feeds `synonyms`; its **description vocab** feeds `mechanics`.
+
+Then derive with judgment (this is your creative contribution; the scripts are mechanical):
 
 - `input_words` — Case A: the game title's meaningful words (drop "3D", "Game", punctuation). Case B: the user's own words. Ranking anchors to these exact words, never to your interpretation.
 - `theme_words` — the subset of input_words that names the concept's THEME/skin (the object noun: yarn, pixel, sand). The rest are mechanic-type words (conveyor, drop, blast). Theme dominates ranking ×20; a game touching only the mechanic word ranks below every theme-family game. **Pure-mechanic concepts** ("this is blast" — no theme noun): set theme_words to [] and let mechanics + description judgment carry the matching.
