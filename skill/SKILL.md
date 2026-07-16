@@ -31,7 +31,7 @@ Two principles override everything:
 > 2. **Standard (~4–6 min total)** — + mechanic-word combos (sort/pop/tap…), catches games named by action
 > 3. **Comprehensive (~8–15 min total)** — + synonym family (bead→marble/ball…), the never-miss net
 
-**Two-phase delivery & snowball policy:** publish the wave-1 page as soon as search+judgment finish (~2–3 min) — **at Precise depth, wave-1 IS the deliverable; do NOT run the snowball unless the user asks** (tell them: say "加深/go deeper" for a snowball wave that catches renamed-skin clones — adds ~3–8 min). At Standard/Comprehensive depth the snowball runs automatically and updates the SAME link.
+**Delivery & snowball policy:** publish the wave-1 page as soon as search+judgment finish — **wave-1 is ALWAYS the deliverable, at every depth. NEVER run the snowball unless the user explicitly asks.** When delivering, tell the user once: say "加深 / go deeper" for an optional snowball wave that catches renamed-skin clones (adds ~3–8 min, updates the same link).
 
 **Platforms:**
 
@@ -99,7 +99,7 @@ Read `<workdir>/descriptions.json` and judge each game — **speed protocol: sca
 $PY $SKILL_DIR/scripts/apply_exclusions.py <workdir>/config.json
 ```
 
-## Step 3.5 — Snowball wave (after judgment, before the page)
+## Step 3.5 — Snowball wave (OPT-IN ONLY — run solely when the user asks to go deeper)
 
 Same mechanic often hides under completely different names ("Pixel Flow!" vs "This is Blast!" — zero shared words). The snowball mines new vocabulary from the titles you just VERIFIED (judgment set minus exclusions) and sweeps the stores again:
 
