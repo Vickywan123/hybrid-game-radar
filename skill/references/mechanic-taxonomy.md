@@ -1,34 +1,50 @@
-# Mechanic Taxonomy 机制分类表 (v0 — 待用户批改)
+# Mechanic Taxonomy 机制分类表 (v1 — 用户批改版，权威)
 
+Source of truth: the USER (hybrid-casual game professional) — this version supersedes Claude's v0 draft entirely.
 Consult BEFORE judging (Step 3/3.5) and when deriving synonyms/mechanics (Step 1).
-判断和配词前必查。机制定家族，皮只是外观；同机制不同皮 = 同族，同词不同机制 = 冒牌。
-User corrections override everything here. 用户的批改永远优先。
+机制定家族，皮只是外观。判断规则：先给本尊/概念定层级和家族，再按行判断候选。
 
-| # | 机制家族 Mechanic family | 代表爆款 Canonical hits | 常见皮 Skins | 描述特征词 Description vocab | 易混淆邻居 + 区分 Confusables |
-|---|---|---|---|---|---|
-| 1 | **Jam 收集** slide-collect-match | Block Jam (Voodoo), Bus Jam, Seat Away, Crowd Express | 方块/巴士/座位/乘客/货物 blocks, buses, seats, passengers, goods | slide, match colors, collect, board, fill slots, tray | ≠#10 停车解谜（挪障碍不配对）但属近亲，搜索时应互相包含 |
-| 2 | **点击移除** tap-away removal | Tap Away, Arrow Out 3D, Take Away, Block Away | 方块/箭头/立方体 blocks, arrows, cubes | tap to remove, clear the board, direction, unstack | ≠#1（无配对无收集）；≠#16 箭头逻辑纸面题 |
-| 3 | **彩色射击方块墙** color blaster queue | This is Blast!, Pixel Flow!, Color Blast: Block Shooter | 方块/像素画/球 blocks, pixels, balls | shoot/blast blocks, line up shots, color matching shooter | ≠#4 祖玛（射移动链）；≠#5 泡泡龙（射顶部棋盘）；≠#6 打砖块（物理弹球） |
-| 4 | **祖玛链条** zuma chain shooter | Zuma, Marble Woka Woka, Marble Blast 系 | 珠子/宝石 marbles, gems | shoot into the chain, match 3 in a row of moving balls | marble/bead 概念的头号冒牌货 |
-| 5 | **泡泡龙** bubble shooter | Bubble Shooter, Panda Pop | 泡泡/水果/动物 bubbles | pop bubbles, aim and shoot up, match 3 bubbles | blast/pop 词汇的常见冒牌 |
-| 6 | **打砖块弹球** brick breaker | Bricks n Balls, Brick Blast (Easybrain) | 砖块/球 bricks, balls | swipe, bounce balls, break bricks | ≠#3（物理反弹，无颜色配对） |
-| 7 | **容器颜色分类** container color sort | Water Sort, Ball Sort, Bead Sort, Nut Sort, Yarn Sort 系 | 液体/球/毛线/螺母/寿司 liquid, balls, yarn, nuts, sushi | sort colors into tubes/bins/plates | 皮变化极多；≠#9 拧螺丝（有 sort 词但核心是 unscrew） |
-| 8 | **传送带/循环收集** conveyor & loop sort | Loop Sort (Voodoo), Yarn Loop (ACTIONFIT), Bead Loop, Cube Loop | 毛线/珠子/方块/食物 yarn, beads, cubes, food | conveyor, loop, belt, catch, wind onto spools | #7 的动态变体，常互为竞品 |
-| 9 | **拧螺丝/拔销** unscrew & pin | Screw Jam, Wood Nuts & Bolts, Screw Sort | 螺丝/木板/销子 screws, bolts, pins | unscrew, nuts and bolts, pin | 常带 sort/jam 词混入其他搜索 |
-| 10 | **滑块脱困/停车场** unblock & parking escape | Unblock Me, Parking Jam, Car Jam, Traffic Escape | 木条/汽车/巴士/绵羊 wood bars, cars, buses, sheep | slide to exit, clear the path, escape the lot | 与 #1 互为近亲（用户判定：seat/block jam 搜索应包含本家族） |
-| 11 | **拔销救援/挖沙引导** pull-pin & dig-path | Pull the Pin, Sand Balls, Dig This! | 销子/沙子/水 pins, sand, water | pull the pin, dig, guide the flow | 物理引导类；≠#2 |
-| 12 | **解缠绕** untangle | Thread Jam, Twisted Tangle, Tangle Master | 绳子/毛线/蛇 ropes, threads, snakes | untangle, knots, twisted | 毛线概念的近亲而非冒牌 |
-| 13 | **消除类** match-3 swap & tap-blast | Candy Crush; Toy Blast, Toon Blast | 糖果/玩具/水果 candies, toys | match 3, swap, tap 2+ same color to blast | blast/jam 词汇的最大冒牌家族 |
-| 14 | **网格填块** grid-fill block puzzle | Block Blast!, Woodoku, 1010! | 木块/宝石 wood blocks, jewels | place blocks, clear lines, 10x10 grid, sudoku grid | "block" 词汇的最大冒牌家族 |
-| 15 | **找物/找茬** hidden object & spot difference | Find Out, Differences | 场景/图片 scenes | find hidden objects, spot the difference | find/spot 词的品类黑洞，永远冒牌 |
-| 16 | **逻辑纸面题** logic grid puzzles | Nonogram, Sudoku, Tents and Trees, 座位推理题 | 网格/数字 grids, numbers | logic puzzle, deduction, grid, riddle | "logic/puzzle" 词黑洞；注意存在真·座位推理题（Seat Logic 类），属边缘可留 |
-| 17 | **跑酷/人群竞速** runner & crowd count | Arrow Fest, Count Masters | 箭头/人群/门 gates, crowd | run, gates, multiply crowd, obstacle course | arrow 词的常见冒牌 |
-| 18 | **六边形堆叠分类** hexa stack sort | Hexa Sort | 六边形片 hexa tiles | stack, sort hexagons, merge stacks | #7 的立体变体，常互为竞品 |
-| 19 | **经营/放置/做菜** idle, tycoon & time-management | Sushi Bar Idle, Cooking Madness, Idle Lumber | 任意主题皮 any theme | idle, tycoon, manage, serve customers, upgrade kitchen | 靠主题词混入（sushi/wood/…），永远冒牌 |
+## 第一层：当下主流混合休闲玩法 (current mainstream hybrid-casual — the target space)
+
+| # | 机制家族 | 代表爆款 | 玩法说明 | 爆款主题/皮 | 变体来源 | EN vocab hints (Claude aid) |
+|---|---|---|---|---|---|---|
+| 1 | 滑块颜色匹配 | Color Block Jam, Seat Away, Block Out!-Color Sort Puzzle | 不带箭头属性，只有颜色属性的滑块匹配 | 带颜色的 Block 滑块 | Seat Away | slide colored blocks, match color, no direction |
+| 2 | 箭头属性点击移除 | Tap Away, Arrow Out 3D, Bus Escape, Parking Jam | 带箭头或"带头"的物体（汽车/火车/壁虎/蛇都具备箭头属性），点击/移动互相阻挡的对象 | 纯箭头 / 箭头&目标 / 汽车&人 / 火车&人 | Parking Jam, Tap Away | tap to remove, direction, unblock, drive out, slither out |
+| 3 | 队列玩法 | This is Blast!, Pixel Flow! | 下方 3–4 个队列，选择其一进入发射/操作区，对上方目标消除 | 发射器打像素方块 | This is Blast | queue, launcher, shoot at wall of blocks, pick a lane |
+| 4 | Jam 玩法（拓扑网格解锁） | Block Jam, Thread Jam, Knit Out, Sand Loop, Marble Sort! | 一侧为拓扑网格，按目标逐渐解开网格，消除网格内物品与目标物 | 人车 / 毛线滚轴 / 球和盒子 / 沙子和桶 | Block Jam | topology, untangle grid, unlock, collect to targets |
+| 5 | 拧螺丝/拆毛线模型 | Screw Jam, Nuts & Bolts, Yarn Fever! Unravel Puzzle | 一层一层拆掉螺丝/板子/毛线模型 | 螺丝和塑料板/木板 / 毛线模型 | Screw Jam, Yarn Fever | unscrew, layer by layer, dismantle, unravel model |
+| 6 | 六边形/四边形相邻堆叠消除 | Hexa Sort, Bloom Sort, Coffee Pack | 将下方随机生成的 3 摞牌放入网格，相邻同色堆叠合并消除 | 卡牌, coin | Block Blast | stack, adjacent merge, hexagon grid, sort stacks |
+| 7 | 颜色置换 | Water Sort, Magic Sort, Ball Sort, Cube Sort, Bird Sort, Coin Sort, Brilliant Sort | 单列容器内不同色，利用空位互换，使同列颜色一致消除 | Water, Sand, Ball, Bird, Cube, Coin | Water Sort | sort colors into tubes, pour, empty slot |
+| 8 | 逻辑文字推理 | Family Tree, That's My Seat, Profile Perfect, Clue Master | 根据文字线索推测人物属性或位置 | 人物特质属性 | Family Tree | clue, deduce, who sits where, logic deduction |
+| 9 | Association games | Solitaire Associations Journey, Bubble Word Jam | 词语父子集归类 / 场景内联想（Category Sort 为图片归类） | 文字 | Word association games | word association, category, group by meaning |
+| 10 | 数独解密新玩法 | Meowdoku! | 根据网格内元素线索找出隐藏元素 | 猫头 | Sudoku Puzzle-Brain Game | grid clue, deduce hidden element, sudoku-like |
+
+**⚠️ 传送带不是独立机制**：部分游戏加入传送带（Pixel Flow, Bus Traffic Fever!, Yarn Loop: Knit Puzzle），它是构成机制的组件，用于提升动态感和玩法深度，**不作为核心玩法分类**。
+
+## 第二层：非当下趋势的混合休闲 (hybrid-casual but not current trend — include, rank lower)
+
+| # | 机制家族 | 代表爆款 | 备注 |
+|---|---|---|---|
+| 1 | 解缠绕 | Twisted Tangle | 毛线类的近亲非冒牌 |
+| 2 | 拔销救援/挖沙引导 | Pull the Pin, Sand Balls | 物理引导 |
+
+## 第三层：不属于混合休闲 (NOT hybrid-casual — impostors, exclude)
+
+| # | 家族 | 代表 | 规则 |
+|---|---|---|---|
+| 1 | 祖玛链条 | Marble Woka Woka | **2025 年以前的一律不放入，除非融合了新玩法** |
+| 2 | 泡泡龙 | Panda Pop | 同上时间规则 |
+| 3 | 打砖块弹球 | Bricks n Balls | 同上时间规则 |
+| 4 | 消除类（swap + tap-blast） | Candy Crush, Toy/Toon Blast | blast/jam 词最大冒牌家族 |
+| 5 | 找物/找茬 | Find Out, Differences | find/spot 词黑洞，永远冒牌 |
+| 6 | 逻辑纸面题 | Nonogram, Tents and Trees | logic 词黑洞（真·座位文字推理属第一层#8，可留） |
+| 7 | 跑酷/人群竞速 | Arrow Fest, Count Masters | arrow 词冒牌 |
+| 8 | 经营/放置/做菜 | Sushi Bar Idle, Cooking Madness | 靠主题词混入，永远冒牌 |
+| 9 | 麻将 | 麻将消除 | |
 
 ## 使用规则 Usage rules
 
-1. **判断时**：先给本尊/概念定家族（用描述特征词），候选游戏描述匹配同一行 → 留；匹配"易混淆邻居"列的另一家族 → 剔（除非该行注明是近亲应包含）。
-2. **近亲家族**（#1↔#10、#7↔#8↔#18、#12 对毛线类）：搜索和报告应互相包含，排序靠相关度自然分层。
-3. **品类黑洞词**（find, logic, spot, blast, jam, block, match）：这些词单独出现永远不足以定家族，必须读描述。
-4. 本表由用户（混合休闲游戏从业者）批改维护；新家族随失败档案增加。
+1. **判断时**：先定层级——第一层是目标空间（留）；第二层是近亲（留，排序自然靠后）；第三层剔除（注意祖玛/泡泡龙/打砖块的 **2025 时间规则**：2025 年后且融合新玩法的可留）。
+2. **皮永远不是机制**：汽车/火车/蛇具备"箭头属性"归第 2 族；人车/毛线/沙子的拓扑解锁归第 4 族。
+3. **品类黑洞词**（find, logic, spot, blast, jam, block, match）：单独出现不足以定家族，必须读描述。
+4. 本表由用户维护批改；EN vocab hints 列为 Claude 补充的判断辅助，其余内容以用户原文为准。
