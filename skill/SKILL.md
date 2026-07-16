@@ -31,7 +31,7 @@ Two principles override everything:
 > 2. **Standard (~4–6 min total)** — + mechanic-word combos (sort/pop/tap…), catches games named by action
 > 3. **Comprehensive (~8–15 min total)** — + synonym family (bead→marble/ball…), the never-miss net
 
-**Two-phase delivery:** publish the wave-1 page as soon as search+judgment finish (~2–3 min), tell the user the link is live and that the snowball wave will update the SAME link a few minutes later. Then run snowball + round-2 judgment + regenerate + republish the same file path.
+**Two-phase delivery & snowball policy:** publish the wave-1 page as soon as search+judgment finish (~2–3 min) — **at Precise depth, wave-1 IS the deliverable; do NOT run the snowball unless the user asks** (tell them: say "加深/go deeper" for a snowball wave that catches renamed-skin clones — adds ~3–8 min). At Standard/Comprehensive depth the snowball runs automatically and updates the SAME link.
 
 **Platforms:**
 
@@ -78,6 +78,9 @@ PY=$SKILL_DIR/venv/bin/python
 $PY $SKILL_DIR/scripts/search_stores.py      <workdir>/config.json   # search stage, both stores
 $PY $SKILL_DIR/scripts/merge_score.py        <workdir>/config.json   # cross-store merge + tiers
 $PY $SKILL_DIR/scripts/fetch_descriptions.py <workdir>/config.json   # judgment set
+$PY $SKILL_DIR/scripts/gen_page.py <workdir>/config.json &            # BACKGROUND: warms the icon/screenshot
+                                                                      # cache while you judge; rerun after
+                                                                      # exclusions for the real page (instant)
 ```
 
 Individual term failures print `skip` and continue — that is by design (unstable VPN); the term list is redundant. Only worry if entire stages fail.
@@ -86,7 +89,7 @@ Individual term failures print `skip` and continue — that is by design (unstab
 
 **First read `$SKILL_DIR/references/mechanic-taxonomy.md`** — the user-maintained mechanic/skin taxonomy. Assign the anchor/concept to a family row, then judge candidates against that row's vocabulary and its confusables column. The taxonomy's cousin-family notes (jam↔parking, sort↔loop↔hexa) override your genre intuition.
 
-Read `<workdir>/descriptions.json` and judge each game: does its *described mechanic* match the concept family? A shared noun is not a match — "Marble …" titles are frequently Zuma chain-shooters (vocabulary: shoot, aim, chain of balls), a completely different genre; bow/archery and board-game vocabularies are other known impostors.
+Read `<workdir>/descriptions.json` and judge each game — **speed protocol: scan all NAMES first; a name that is unambiguously Tier 3 by the taxonomy (Escape Room…, Woodoku…, Candy … Match 3) needs no description read; spend description-reading only on uncertain names.** Does the *described mechanic* match the concept family? A shared noun is not a match — "Marble …" titles are frequently Zuma chain-shooters (vocabulary: shoot, aim, chain of balls), a completely different genre; bow/archery and board-game vocabularies are other known impostors.
 
 **Case A: judge against the anchor game's own description, not your genre intuition.** First extract the pinned game's mechanic fingerprint (its description's action vocabulary — e.g. Block Jam: slide, match colors, collect). A candidate matches if its description shares that fingerprint, whatever its skin.
 
