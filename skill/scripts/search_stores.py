@@ -69,7 +69,9 @@ STOP = {"game", "games", "puzzle", "puzzles", "free", "new", "best", "fun",
         "epic", "ultimate", "crazy", "happy", "world", "story", "journey",
         "color", "colors", "colorful", "away", "craze", "crush", "rescue",
         "match", "matching", "relax", "relaxing", "cozy", "satisfying",
-        "asmr", "art", "hero", "jam", "blast", "pop", "sort", "sorting"}
+        "asmr", "art", "hero", "jam", "blast", "pop", "sort", "sorting",
+        "block", "blocks", "escape", "room", "rooms", "wood", "wooden",
+        "woody", "tap", "drop", "jewel", "gem", "cube", "slide", "maze"}
 
 def _is_known(w, known):
     """Word variants count as known: 'sorting'~'sort', 'colors'~'color'."""

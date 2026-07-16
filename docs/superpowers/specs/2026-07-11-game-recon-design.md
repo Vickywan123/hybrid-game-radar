@@ -127,6 +127,7 @@ No long-tail bucket — it lives at the dial's "all" stop. Hidden-count hint ("+
 | 25 | Lazy round-2 judgment (sampling + regex) | Bingo Frenzy, Cooking Madness reached Established | Round 2 must read every snowball name; no sampling (§3.3) |
 | 26 | Taxonomy used for judgment but not for search seeding | Ant picture-clearing concept missed its family's canonical hits (This is Blast, Pixel Flow — queue family, ants are just the skin) | Classify concept into a taxonomy family BEFORE config; family's canonical hits + skins + vocab seed the search (§3.1, SKILL.md Step 1) |
 | 27 | Exclusion misses punctuation variants of the same title | "Block Blast!" survived an exclusion written "Block Blast！" (full-width bang) | apply_exclusions matches normalized names, same standard as the merge (§3.3) |
+| 28 | Universal filler words mined as family vocabulary | "block"/"escape" from arrow-out titles pulled in 240 grid-fill + room-escape games | STOP list covers industry-wide fillers (block/escape/room/wood/tap/drop/jewel/cube/slide/maze) (§3.1) |
 
 **Standing rule:** user reports a miss → diagnose → fix the class, not the instance → add a row here.
 

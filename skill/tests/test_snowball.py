@@ -2,6 +2,17 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 from search_stores import mine_new_words, snowball_terms
 
+def test_universal_fillers_not_mined():
+    """Failure #28: 'block'/'escape' mined from arrow-out titles dragged in
+    grid-fill puzzles and room-escape adventures (240 of 450 additions)."""
+    verified = ["Arrow Out 3D: Tap Away", "Block Away - Tap Out Puzzle",
+                "Arrow Escape: Logic Puzzle", "Block Escape: Tap Away Puzzle",
+                "Wooden Slide: Block Escape", "Arrows - Puzzle Escape"]
+    mined = mine_new_words(verified, ["arrow", "sand", "drop", "out", "tap"])
+    for bad in ["block", "escape", "wood", "wooden", "slide", "away"]:
+        assert bad not in mined, f"filler leaked: {mined}"
+    print(f"test_universal_fillers_not_mined OK (mined={mined})")
+
 def test_pixel_flow_class():
     """Spec failure #17: 'Pixel Flow!' shares zero words with 'This is Blast!'.
     Mining MECHANIC-VERIFIED titles must surface the family's real vocabulary
@@ -100,3 +111,4 @@ test_theme_dominates_mechanic()
 test_mine_ignores_stopwords()
 test_yarn_generic_leak()
 test_snowball_scoring_not_polluted()
+test_universal_fillers_not_mined()
