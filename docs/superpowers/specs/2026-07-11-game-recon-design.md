@@ -126,6 +126,7 @@ No long-tail bucket — it lives at the dial's "all" stop. Hidden-count hint ("+
 | 24 | Mined single word drags in whole genres | "find"/"logic"/"frenzy" flooded Seat Away with hidden-object, logic-grid, bingo | Mined singles need ≥3 verified-title occurrences; combos always allowed (verified combos still catch Pixel Flow) (§3.1) |
 | 25 | Lazy round-2 judgment (sampling + regex) | Bingo Frenzy, Cooking Madness reached Established | Round 2 must read every snowball name; no sampling (§3.3) |
 | 26 | Taxonomy used for judgment but not for search seeding | Ant picture-clearing concept missed its family's canonical hits (This is Blast, Pixel Flow — queue family, ants are just the skin) | Classify concept into a taxonomy family BEFORE config; family's canonical hits + skins + vocab seed the search (§3.1, SKILL.md Step 1) |
+| 27 | Exclusion misses punctuation variants of the same title | "Block Blast!" survived an exclusion written "Block Blast！" (full-width bang) | apply_exclusions matches normalized names, same standard as the merge (§3.3) |
 
 **Standing rule:** user reports a miss → diagnose → fix the class, not the instance → add a row here.
 
