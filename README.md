@@ -84,12 +84,6 @@ A cold end-to-end run at precise depth takes ~3 minutes; cached re-runs are far 
 
 US storefront only (for now) · revenue ranking disabled pending AppMagic integration · theme subscriptions/notifications on the deferred list · macOS image tooling.
 
-## 中文简介
-
-**为什么做这个工具**：现有的第三方排行/发行平台大多不支持多关键词搜索——输入"Arrow Bus puzzle"直接零结果，混合玩法概念根本查不了；而且查竞品要先搜 iOS、再单独搜安卓，同一款游戏两边名字还不一样，全靠人肉对账。
-
-Hybrid Game Radar 是一个 Claude Code 技能：输入玩法概念、游戏名、商店链接或截图，**一次跑完苹果+谷歌双商店**，多关键词自动拆解组合（正反词序都搜），按**机制**（而非名字）判断相似性，双商店同款自动合并，输出可交互的竞品全景报告——新品雷达 + 1M+ 老将、悬停截图、可审计的剔除清单。搜索分三档：**精准（推荐，约 2–3 分钟）**/ 标准（约 4–6 分钟）/ 全面（约 8–15 分钟）——建议先用精准档，结果不够再加深，避免不必要的等待；结果有缓存，二次加深会快很多。为混合休闲游戏开发者打造：在立项前发现"这个想法有没有人做过、做得怎么样"。工具的全部 25 条规则都来自真实开发者的实测纠错，每条都有回归测试锁定。
-
 ## License
 
 MIT — see [LICENSE](LICENSE).
