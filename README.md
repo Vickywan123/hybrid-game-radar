@@ -19,7 +19,7 @@ The existing workflow for checking "is my idea taken?" is broken in three specif
 ## What a run looks like
 
 ```
-You:  有没有类似 this is blast 的游戏
+You:  find games like This is Blast
 Bot:  Is this a concept or a specific game?  → specific game
       Search depth? (precise ~2-3 min / standard / comprehensive)  → precise
       Platforms? (both / iOS / Android)  → both
