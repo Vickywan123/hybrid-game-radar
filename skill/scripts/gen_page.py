@@ -1,6 +1,7 @@
 # skill/scripts/gen_page.py
 """Render games.json into the approved report page. Spec: design doc §5."""
-import base64, concurrent.futures, hashlib, html, json, os, ssl, subprocess, sys, tempfile, time, urllib.request
+import base64, concurrent.futures, hashlib, html, io, json, os, ssl, sys, urllib.request
+from PIL import Image
 
 CTX = ssl.create_default_context()
 CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "cache")
@@ -11,8 +12,20 @@ def _icon_cache_path(url):
 def esc(s):
     return html.escape(str(s))
 
+def _shrink(raw, max_side=None, height=None, quality=70):
+    """Resize image bytes to JPEG via Pillow (cross-platform, no macOS sips)."""
+    img = Image.open(io.BytesIO(raw)).convert("RGB")
+    if height:
+        w = max(1, round(img.width * height / img.height))
+        img = img.resize((w, height), Image.LANCZOS)
+    elif max_side:
+        img.thumbnail((max_side, max_side), Image.LANCZOS)
+    out = io.BytesIO()
+    img.save(out, "JPEG", quality=quality)
+    return out.getvalue()
+
 def fetch_icon_64(url):
-    """Download an icon and shrink to 64px JPEG (macOS sips). Cached; empty on failure."""
+    """Download an icon and shrink to 64px JPEG. Cached; empty on failure."""
     if not url: return ""
     try:
         p = _icon_cache_path(url)
@@ -24,26 +37,19 @@ def fetch_icon_64(url):
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urllib.request.urlopen(req, timeout=15, context=CTX) as r:
             raw = r.read()
-        with tempfile.TemporaryDirectory() as d:
-            src, dst = f"{d}/i.bin", f"{d}/o.jpg"
-            open(src, "wb").write(raw)
-            p = subprocess.run(["sips", "-Z", "64", "-s", "format", "jpeg",
-                                "-s", "formatOptions", "70", src, "--out", dst],
-                               capture_output=True)
-            if p.returncode == 0:
-                data = "data:image/jpeg;base64," + base64.b64encode(open(dst, "rb").read()).decode()
-                try:
-                    os.makedirs(CACHE_DIR, exist_ok=True)
-                    open(_icon_cache_path(url), "w").write(data)
-                except Exception:
-                    pass
-                return data
+        data = "data:image/jpeg;base64," + base64.b64encode(_shrink(raw, max_side=64, quality=70)).decode()
+        try:
+            os.makedirs(CACHE_DIR, exist_ok=True)
+            open(_icon_cache_path(url), "w").write(data)
+        except Exception:
+            pass
+        return data
     except Exception:
         pass
     return ""
 
 def fetch_shot_120(url):
-    """Store screenshot shrunk to 120px height JPEG. Cached; empty on failure."""
+    """Store screenshot shrunk to 200px height JPEG (shown at 120px). Cached."""
     if not url: return ""
     try:
         p = _icon_cache_path("shot200" + url)
@@ -55,20 +61,13 @@ def fetch_shot_120(url):
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urllib.request.urlopen(req, timeout=15, context=CTX) as r:
             raw = r.read()
-        with tempfile.TemporaryDirectory() as d:
-            src, dst = f"{d}/i.bin", f"{d}/o.jpg"
-            open(src, "wb").write(raw)
-            pr = subprocess.run(["sips", "--resampleHeight", "200", "-s", "format", "jpeg",
-                                 "-s", "formatOptions", "45", src, "--out", dst],
-                                capture_output=True)
-            if pr.returncode == 0:
-                data = "data:image/jpeg;base64," + base64.b64encode(open(dst, "rb").read()).decode()
-                try:
-                    os.makedirs(CACHE_DIR, exist_ok=True)
-                    open(_icon_cache_path("shot200" + url), "w").write(data)
-                except Exception:
-                    pass
-                return data
+        data = "data:image/jpeg;base64," + base64.b64encode(_shrink(raw, height=200, quality=45)).decode()
+        try:
+            os.makedirs(CACHE_DIR, exist_ok=True)
+            open(_icon_cache_path("shot200" + url), "w").write(data)
+        except Exception:
+            pass
+        return data
     except Exception:
         pass
     return ""

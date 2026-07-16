@@ -42,7 +42,9 @@ The report is a single self-contained HTML page: filterable, light/dark aware, m
 
 ## Install
 
-Requires: [Claude Code](https://claude.com/claude-code), Python 3, macOS (uses `sips` for image resizing — Linux users: swap in Pillow).
+Requires: [Claude Code](https://claude.com/claude-code) and Python 3. **Cross-platform** — macOS, Linux, and Windows (image processing uses Pillow, no OS-specific tools).
+
+macOS / Linux:
 
 ```bash
 git clone https://github.com/Vickywan123/hybrid-game-radar.git
@@ -50,11 +52,20 @@ cd hybrid-game-radar
 ./install.sh          # copies the skill to ~/.claude/skills/hybrid-game-radar + creates its venv
 ```
 
+Windows (PowerShell):
+
+```powershell
+git clone https://github.com/Vickywan123/hybrid-game-radar.git
+Copy-Item -Recurse hybrid-game-radar\skill "$env:USERPROFILE\.claude\skills\hybrid-game-radar"
+python -m venv "$env:USERPROFILE\.claude\skills\hybrid-game-radar\venv"
+& "$env:USERPROFILE\.claude\skills\hybrid-game-radar\venv\Scripts\pip" install google-play-scraper pillow
+```
+
 Then in any Claude Code conversation:
 
 > *"recon: merge tower defense"* · *"find games like Seat Away"* · *"check this idea: yarn + conveyor"* · or paste a game screenshot
 
-The only dependency is [`google-play-scraper`](https://pypi.org/project/google-play-scraper/) (installed into the skill's own venv). Apple data comes from the free iTunes Search API. No API keys.
+Dependencies: [`google-play-scraper`](https://pypi.org/project/google-play-scraper/) and [`Pillow`](https://pypi.org/project/pillow/) (installed into the skill's own venv). Apple data comes from the free iTunes Search API. No API keys.
 
 ## Architecture
 
@@ -82,7 +93,7 @@ A cold end-to-end run at precise depth takes ~3 minutes; cached re-runs are far 
 
 ## Known limits
 
-**Puzzle-genre hybrids only** — the genre gates and mechanic taxonomy are tuned for the puzzle vertical (simulation/arcade/io hybrids are out of scope for now) · US storefront only · revenue ranking disabled pending AppMagic integration · theme subscriptions/notifications on the deferred list · macOS image tooling.
+**Puzzle-genre hybrids only** — the genre gates and mechanic taxonomy are tuned for the puzzle vertical (simulation/arcade/io hybrids are out of scope for now) · US storefront only · revenue ranking disabled pending AppMagic integration · theme subscriptions/notifications on the deferred list.
 
 ## License
 

@@ -7,6 +7,6 @@ mkdir -p "$DST"
 rsync -a --delete --exclude venv --exclude cache "$SRC/" "$DST/"
 if [ ! -d "$DST/venv" ]; then
   python3 -m venv "$DST/venv"
-  "$DST/venv/bin/pip" install --quiet google-play-scraper
+  "$DST/venv/bin/pip" install --quiet google-play-scraper pillow
 fi
 echo "installed to $DST"
