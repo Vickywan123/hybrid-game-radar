@@ -2,8 +2,7 @@ import sys, os, json, tempfile
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 from apply_exclusions import apply
 
-def test_apply()
-test_punctuation_insensitive():
+def test_apply():
     games = [{"name": "Arrow Drop"}, {"name": "Marble Woka Woka: Jungle Blast"}]
     with tempfile.TemporaryDirectory() as d:
         json.dump(games, open(f"{d}/games.json", "w"))
