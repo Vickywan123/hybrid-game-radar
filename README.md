@@ -52,7 +52,7 @@ cd hybrid-game-radar
 
 Then in any Claude Code conversation:
 
-> *"recon: merge tower defense"* · *"find games like Seat Away"* · *"查竞品：毛线+传送带"* · or paste a game screenshot
+> *"recon: merge tower defense"* · *"find games like Seat Away"* · *"check this idea: yarn + conveyor"* · or paste a game screenshot
 
 The only dependency is [`google-play-scraper`](https://pypi.org/project/google-play-scraper/) (installed into the skill's own venv). Apple data comes from the free iTunes Search API. No API keys.
 
