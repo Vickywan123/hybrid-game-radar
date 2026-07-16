@@ -1,5 +1,7 @@
 # Mechanic Taxonomy 机制分类表 (v1 — 用户批改版，权威)
 
+**Scope 适用范围：仅限 PUZZLE 品类的混合休闲。** 本表与代码中的品类闸门（Puzzle/Casual/Board/Strategy）均为 puzzle 取向；模拟、街机、io、跑酷等其他混合休闲分支不在当前覆盖范围。
+
 Source of truth: the USER (hybrid-casual game professional) — this version supersedes Claude's v0 draft entirely.
 Consult BEFORE judging (Step 3/3.5) and when deriving synonyms/mechanics (Step 1).
 机制定家族，皮只是外观。判断规则：先给本尊/概念定层级和家族，再按行判断候选。

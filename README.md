@@ -82,7 +82,7 @@ A cold end-to-end run at precise depth takes ~3 minutes; cached re-runs are far 
 
 ## Known limits
 
-US storefront only (for now) · revenue ranking disabled pending AppMagic integration · theme subscriptions/notifications on the deferred list · macOS image tooling.
+**Puzzle-genre hybrids only** — the genre gates and mechanic taxonomy are tuned for the puzzle vertical (simulation/arcade/io hybrids are out of scope for now) · US storefront only · revenue ranking disabled pending AppMagic integration · theme subscriptions/notifications on the deferred list · macOS image tooling.
 
 ## License
 
