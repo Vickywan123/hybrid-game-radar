@@ -1,52 +1,50 @@
-# Mechanic Taxonomy 机制分类表 (v1 — 用户批改版，权威)
+# Mechanic Taxonomy (v1 — user-authored, authoritative)
 
-**Scope 适用范围：仅限 PUZZLE 品类的混合休闲。** 本表与代码中的品类闸门（Puzzle/Casual/Board/Strategy）均为 puzzle 取向；模拟、街机、io、跑酷等其他混合休闲分支不在当前覆盖范围。
+**Scope: the PUZZLE vertical of hybrid-casual only.** The code's genre gates (Puzzle/Casual/Board/Strategy) share this scope; simulation, arcade, io and runner hybrids are out of scope for now.
 
-Source of truth: the USER (hybrid-casual game professional) — this version supersedes Claude's v0 draft entirely.
-Consult BEFORE judging (Step 3/3.5) and when deriving synonyms/mechanics (Step 1).
-机制定家族，皮只是外观。判断规则：先给本尊/概念定层级和家族，再按行判断候选。
+Source of truth: the USER (a hybrid-casual game professional). Consult BEFORE judging (Step 3/3.5) and when deriving synonyms/mechanics (Step 1). The mechanic defines the family; the skin is only appearance. Judge by assigning the anchor/concept to a tier and family first, then judging candidates against that row.
 
-## 第一层：当下主流混合休闲玩法 (current mainstream hybrid-casual — the target space)
+## Tier 1 — Current mainstream hybrid-casual mechanics (the target space)
 
-| # | 机制家族 | 代表爆款 | 玩法说明 | 爆款主题/皮 | 变体来源 | EN vocab hints (Claude aid) |
+| # | Mechanic family | Canonical hits | How it plays | Hit themes / skins | Variant origin | Description vocab |
 |---|---|---|---|---|---|---|
-| 1 | 滑块颜色匹配 | Color Block Jam, Seat Away, Block Out!-Color Sort Puzzle | 不带箭头属性，只有颜色属性的滑块匹配 | 带颜色的 Block 滑块 | Seat Away | slide colored blocks, match color, no direction |
-| 2 | 箭头属性点击移除 | Tap Away, Arrow Out 3D, Bus Escape, Parking Jam | 带箭头或"带头"的物体（汽车/火车/壁虎/蛇都具备箭头属性），点击/移动互相阻挡的对象 | 纯箭头 / 箭头&目标 / 汽车&人 / 火车&人 | Parking Jam, Tap Away | tap to remove, direction, unblock, drive out, slither out |
-| 3 | 队列玩法 | This is Blast!, Pixel Flow! | 下方 3–4 个队列，选择其一进入发射/操作区，对上方目标消除 | 发射器打像素方块 | This is Blast | queue, launcher, shoot at wall of blocks, pick a lane |
-| 4 | Jam 玩法（拓扑网格解锁） | Block Jam, Thread Jam, Knit Out, Sand Loop, Marble Sort! | 一侧为拓扑网格，按目标逐渐解开网格，消除网格内物品与目标物 | 人车 / 毛线滚轴 / 球和盒子 / 沙子和桶 | Block Jam | topology, untangle grid, unlock, collect to targets |
-| 5 | 拧螺丝/拆毛线模型 | Screw Jam, Nuts & Bolts, Yarn Fever! Unravel Puzzle | 一层一层拆掉螺丝/板子/毛线模型 | 螺丝和塑料板/木板 / 毛线模型 | Screw Jam, Yarn Fever | unscrew, layer by layer, dismantle, unravel model |
-| 6 | 六边形/四边形相邻堆叠消除 | Hexa Sort, Bloom Sort, Coffee Pack | 将下方随机生成的 3 摞牌放入网格，相邻同色堆叠合并消除 | 卡牌, coin | Block Blast | stack, adjacent merge, hexagon grid, sort stacks |
-| 7 | 颜色置换 | Water Sort, Magic Sort, Ball Sort, Cube Sort, Bird Sort, Coin Sort, Brilliant Sort | 单列容器内不同色，利用空位互换，使同列颜色一致消除 | Water, Sand, Ball, Bird, Cube, Coin | Water Sort | sort colors into tubes, pour, empty slot |
-| 8 | 逻辑文字推理 | Family Tree, That's My Seat, Profile Perfect, Clue Master | 根据文字线索推测人物属性或位置 | 人物特质属性 | Family Tree | clue, deduce, who sits where, logic deduction |
-| 9 | Association games | Solitaire Associations Journey, Bubble Word Jam | 词语父子集归类 / 场景内联想（Category Sort 为图片归类） | 文字 | Word association games | word association, category, group by meaning |
-| 10 | 数独解密新玩法 | Meowdoku! | 根据网格内元素线索找出隐藏元素 | 猫头 | Sudoku Puzzle-Brain Game | grid clue, deduce hidden element, sudoku-like |
+| 1 | Color-slide matching | Color Block Jam, Seat Away, Block Out!-Color Sort Puzzle | Sliders carry a color attribute only — no direction attribute | Colored block sliders | Seat Away | slide colored blocks, match color, no direction |
+| 2 | Direction-attribute tap removal | Tap Away, Arrow Out 3D, Bus Escape, Parking Jam | Objects carry an arrow or a "head" (cars, trains, geckos, snakes all have direction); tap/move mutually blocking objects | Pure arrows / arrows & targets / cars & people / trains & people | Parking Jam, Tap Away | tap to remove, direction, unblock, drive out, slither out |
+| 3 | Queue gameplay | This is Blast!, Pixel Flow! | 3–4 queues at the bottom; player picks one into the firing/operating zone to clear targets above | Launchers shooting pixel blocks | This is Blast | queue, launcher, shoot at wall of blocks, pick a lane |
+| 4 | Jam (topology-grid unlocking) | Block Jam, Thread Jam, Knit Out, Sand Loop, Marble Sort! | One side holds a topological grid; progressively unlock it per targets, clearing grid items and target objects | People & cars / yarn rollers / balls & boxes / sand & buckets | Block Jam | topology, untangle grid, unlock, collect to targets |
+| 5 | Unscrew / model dismantling | Screw Jam, Nuts & Bolts, Yarn Fever! Unravel Puzzle | Dismantle screws / boards / yarn models layer by layer | Screws & plastic/wood boards / yarn models | Screw Jam, Yarn Fever | unscrew, layer by layer, dismantle, unravel model |
+| 6 | Hex/quad adjacent stack-merge | Hexa Sort, Bloom Sort, Coffee Pack | Place 3 randomly generated stacks onto a hex grid; adjacent same colors stack and merge away | Cards, coins | Block Blast | stack, adjacent merge, hexagon grid, sort stacks |
+| 7 | Color swap sort | Water Sort, Magic Sort, Ball Sort, Cube Sort, Bird Sort, Coin Sort, Brilliant Sort | Single-column containers hold mixed colors; use empty slots to swap until each column is one color | Water, sand, balls, birds, cubes, coins | Water Sort | sort colors into tubes, pour, empty slot |
+| 8 | Text-clue logic deduction | Family Tree, That's My Seat, Profile Perfect, Clue Master | Deduce characters' attributes or positions from written clues | Character traits | Family Tree | clue, deduce, who sits where, logic deduction |
+| 9 | Association games | Solitaire Associations Journey, Bubble Word Jam | Group words into parent/child sets, or scene-based association (Category Sort groups by picture content) | Words | Word association games | word association, category, group by meaning |
+| 10 | New sudoku-style deduction | Meowdoku! | Find hidden elements from clues given in the grid | Cat heads | Sudoku Puzzle-Brain Game | grid clue, deduce hidden element, sudoku-like |
 
-**⚠️ 传送带不是独立机制**：部分游戏加入传送带（Pixel Flow, Bus Traffic Fever!, Yarn Loop: Knit Puzzle），它是构成机制的组件，用于提升动态感和玩法深度，**不作为核心玩法分类**。
+**⚠️ Conveyors are a component, not a mechanic.** Some games add a conveyor belt (Pixel Flow, Bus Traffic Fever!, Yarn Loop: Knit Puzzle) — it is part of the mechanism, raising dynamism and depth, and is never a core-mechanic classification of its own.
 
-## 第二层：非当下趋势的混合休闲 (hybrid-casual but not current trend — include, rank lower)
+## Tier 2 — Hybrid-casual but not the current trend (include; ranks lower naturally)
 
-| # | 机制家族 | 代表爆款 | 备注 |
+| # | Mechanic family | Canonical hits | Notes |
 |---|---|---|---|
-| 1 | 解缠绕 | Twisted Tangle | 毛线类的近亲非冒牌 |
-| 2 | 拔销救援/挖沙引导 | Pull the Pin, Sand Balls | 物理引导 |
+| 1 | Untangle | Twisted Tangle | A cousin of the yarn family, not an impostor |
+| 2 | Pull-pin rescue / sand-dig guidance | Pull the Pin, Sand Balls | Physics guidance |
 
-## 第三层：不属于混合休闲 (NOT hybrid-casual — impostors, exclude)
+## Tier 3 — NOT hybrid-casual (impostors — exclude)
 
-| # | 家族 | 代表 | 规则 |
+| # | Family | Canonical | Rule |
 |---|---|---|---|
-| 1 | 祖玛链条 | Marble Woka Woka | **2025 年以前的一律不放入，除非融合了新玩法** |
-| 2 | 泡泡龙 | Panda Pop | 同上时间规则 |
-| 3 | 打砖块弹球 | Bricks n Balls | 同上时间规则 |
-| 4 | 消除类（swap + tap-blast） | Candy Crush, Toy/Toon Blast | blast/jam 词最大冒牌家族 |
-| 5 | 找物/找茬 | Find Out, Differences | find/spot 词黑洞，永远冒牌 |
-| 6 | 逻辑纸面题 | Nonogram, Tents and Trees | logic 词黑洞（真·座位文字推理属第一层#8，可留） |
-| 7 | 跑酷/人群竞速 | Arrow Fest, Count Masters | arrow 词冒牌 |
-| 8 | 经营/放置/做菜 | Sushi Bar Idle, Cooking Madness | 靠主题词混入，永远冒牌 |
-| 9 | 麻将 | 麻将消除 | |
+| 1 | Zuma chain shooters | Marble Woka Woka | **Never include any released before 2025, unless fused with a new mechanic** |
+| 2 | Bubble shooters | Panda Pop | Same pre-2025 rule |
+| 3 | Brick breakers | Bricks n Balls | Same pre-2025 rule |
+| 4 | Match-3 (swap + tap-blast) | Candy Crush, Toy/Toon Blast | The biggest impostor family for blast/jam vocabulary |
+| 5 | Hidden object / spot-the-difference | Find Out, Differences | find/spot vocabulary black hole — always impostors |
+| 6 | Paper logic puzzles | Nonogram, Tents and Trees | logic-word black hole (true seat-deduction games belong to Tier 1 #8 and may stay) |
+| 7 | Runners / crowd racing | Arrow Fest, Count Masters | Common impostors for arrow vocabulary |
+| 8 | Idle / tycoon / cooking | Sushi Bar Idle, Cooking Madness | Sneak in via theme words — always impostors |
+| 9 | Mahjong | Mahjong tile-matching | |
 
-## 使用规则 Usage rules
+## Usage rules
 
-1. **判断时**：先定层级——第一层是目标空间（留）；第二层是近亲（留，排序自然靠后）；第三层剔除（注意祖玛/泡泡龙/打砖块的 **2025 时间规则**：2025 年后且融合新玩法的可留）。
-2. **皮永远不是机制**：汽车/火车/蛇具备"箭头属性"归第 2 族；人车/毛线/沙子的拓扑解锁归第 4 族。
-3. **品类黑洞词**（find, logic, spot, blast, jam, block, match）：单独出现不足以定家族，必须读描述。
-4. 本表由用户维护批改；EN vocab hints 列为 Claude 补充的判断辅助，其余内容以用户原文为准。
+1. **When judging**: assign the tier first — Tier 1 is the target space (keep); Tier 2 are cousins (keep; relevance ranking places them lower); Tier 3 gets excluded (mind the **pre-2025 rule** for zuma/bubble/brick: post-2025 releases fused with new mechanics may stay).
+2. **The skin is never the mechanic**: cars/trains/snakes carry the "direction attribute" → family #2; people-cars/yarn/sand topology unlocking → family #4.
+3. **Vocabulary black holes** (find, logic, spot, blast, jam, block, match): the word alone never determines the family — read the description.
+4. This table is maintained and corrected by the user; the Description vocab column is a Claude-added judgment aid — everything else follows the user's original wording.
