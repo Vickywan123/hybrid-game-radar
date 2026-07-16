@@ -1,10 +1,10 @@
 # 🎯 Hybrid Game Radar
 
-**A Claude Code skill that answers a game developer's most expensive question: *"Has someone already built this idea — and is it working?"***
+**A Claude Code skill that answers a puzzle developer's most expensive question: *"Has someone already built this idea — and is it working?"***
 
-Give it a concept ("yarn game with conveyor"), a game name, a store link, or just a screenshot — it exhaustively searches the **iOS App Store + Google Play**, judges every candidate's *mechanic* (not its name), and delivers an interactive visual report: every similar game, cross-store deduplicated, split into **Fresh launches** (your race rivals) and **Established 1M+** (who owns the space), with hover screenshots, install counts, and a fully auditable exclusion list.
+Give it a concept ("yarn game with conveyor"), a game name, a store link, or just a screenshot — it exhaustively searches the **iOS App Store + Google Play**, judges every candidate's *mechanic* (not its name), and delivers an interactive visual report: every similar puzzle game, cross-store deduplicated, split into **Fresh launches** (your race rivals) and **Established 1M+** (who owns the space), with hover screenshots, install counts, and a fully auditable exclusion list.
 
-Built for hybrid-casual game developers, where everyone remixes the same handful of hits — so two studios routinely land on the same idea within weeks of each other. The whole point is to check **before** you build: if someone already shipped your idea, you simply don't build it — and spend those months on an idea that's actually open.
+Built for the **puzzle vertical of hybrid-casual**, where everyone remixes the same handful of hits — so two studios routinely land on the same idea within weeks of each other. The whole point is to check **before** you build: if someone already shipped your idea, you simply don't build it — and spend those months on an idea that's actually open.
 
 ## Why this exists
 
